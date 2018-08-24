@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QDialogButtonBox, QCheckBox
 
-from vgrabber.importaction import ImportAction
+from vgrabber.importer import ImportAction
 
 
 class ImportSelectorDialog:
@@ -41,9 +41,9 @@ class ImportSelectorDialog:
 
     def exec(self):
         if self.__dialog.exec() != QDialog.Accepted:
-            return None, None
+            return None
         while not any(check.isChecked() for check in self.__possibilities.values()):
             if self.__dialog.exec() != QDialog.Accepted:
-                return None, None
+                return None
 
         return {action for action, check in self.__possibilities.items() if check.isChecked() and check.isEnabled()}

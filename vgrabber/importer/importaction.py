@@ -26,3 +26,4 @@ ImportAction.moodle_final_exam_list.depends = (ImportAction.moodle_student_list,
 ImportAction.moodle_final_exam_details.depends = (ImportAction.moodle_final_exam_list, )
 
 ImportAction.default = (ImportAction.basic_info, )
+ImportAction.all = frozenset(ImportAction)
