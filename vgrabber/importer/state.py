@@ -20,3 +20,7 @@ class ImporterState:
     def finish(self):
         self.browser.quit()
         del self.browser
+
+    def finish_actions(self):
+        for action in self.requested_actions:
+            self.model.finish_action(action)

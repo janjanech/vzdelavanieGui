@@ -27,7 +27,12 @@ login, password = login_dlg.exec()
 if login is None:
     sys.exit(0)
 
-import_dlg = ImportSelectorDialog()
+if model is not None:
+    finished_actions = model.progress
+else:
+    finished_actions = []
+
+import_dlg = ImportSelectorDialog(finished_actions)
 actions = import_dlg.exec()
 if actions is None:
     sys.exit(0)

@@ -27,4 +27,6 @@ class Importer:
                 if e.condition():
                     e.exec()
 
+        self.__state.finish_actions()
+
         self.model = self.__state.model

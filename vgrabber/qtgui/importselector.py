@@ -4,7 +4,8 @@ from vgrabber.importer import ImportAction
 
 
 class ImportSelectorDialog:
-    def __init__(self):
+    def __init__(self, finished_actions):
+        self.__finished_actions = set(finished_actions)
         self.__possibilities = {}
 
         self.__dialog = QDialog()
@@ -14,7 +15,11 @@ class ImportSelectorDialog:
 
         for action in ImportAction:
             check = QCheckBox()
-            check.setText(action.name)
+            if action in self.__finished_actions:
+                check.setText("{0} (finished)".format(action.name))
+                check.setStyleSheet('QCheckBox { font-style: italic }')
+            else:
+                check.setText(action.name)
             self.__possibilities[action] = check
             check.toggled.connect(lambda *args: self.__refresh())
             layout.addWidget(check)
@@ -35,7 +40,7 @@ class ImportSelectorDialog:
         for action, check in self.__possibilities.items():
             enabled = True
             for dep in action.depends:
-                if not self.__possibilities[dep].isChecked():
+                if not self.__possibilities[dep].isChecked() and dep not in self.__finished_actions:
                     enabled = False
             check.setEnabled(enabled)
 
