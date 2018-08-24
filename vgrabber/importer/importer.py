@@ -9,9 +9,9 @@ class Importer:
         (ImportAction.all, SelectSubjectActionExecutor),
     )
 
-    def __init__(self, login, password, actions, ui_callbacks):
+    def __init__(self, login, password, actions, ui_callbacks, model=None):
         self.__requested_actions = actions
-        self.__state = ImporterState(login, password, actions, ui_callbacks)
+        self.__state = ImporterState(login, password, actions, ui_callbacks, model)
         self.model = None
 
     def __enter__(self):

@@ -3,13 +3,13 @@ from seleniumrequests import Chrome
 
 
 class ImporterState:
-    def __init__(self, login, password, requested_actions, ui_callbacks):
+    def __init__(self, login, password, requested_actions, ui_callbacks, model):
         self.login = login
         self.password = password
 
         self.requested_actions = requested_actions
 
-        self.model = None
+        self.model = model
 
         self.ui_callbacks = ui_callbacks
 

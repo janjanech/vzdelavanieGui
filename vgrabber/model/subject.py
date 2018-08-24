@@ -13,3 +13,6 @@ class Subject:
 
     def __str__(self):
         return "<Subject {0} {1} in year {2}>".format(self.number, self.name, self.year)
+
+    def finish_action(self, action):
+        self.progress.add(action)

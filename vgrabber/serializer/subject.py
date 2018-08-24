@@ -16,7 +16,7 @@ class SubjectSerializer:
         progress_element = Element('progress')
 
         for action in self.__subject.progress:
-            action_element = Element('finished', action=action)
+            action_element = Element('finished', action=action.name)
             progress_element.append(action_element)
 
         subject_element.append(progress_element)
