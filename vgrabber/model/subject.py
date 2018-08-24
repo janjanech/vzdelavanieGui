@@ -3,7 +3,7 @@ class Subject:
         self.number = number
         self.name = name
         self.year = year
-        self.__progress = set()
+        self.progress = set()
         self.start_date = None
         self.students = []
         self.teachers = []

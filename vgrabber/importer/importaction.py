@@ -2,7 +2,6 @@ from enum import Enum, auto
 
 
 class ImportAction(Enum):
-    basic_info = auto()
     student_list = auto()
     final_exam_list = auto()
     grades = auto()
@@ -14,9 +13,8 @@ class ImportAction(Enum):
     moodle_final_exam_details = auto()
 
 
-ImportAction.basic_info.depends = ()
-ImportAction.student_list.depends = (ImportAction.basic_info, )
-ImportAction.final_exam_list.depends = (ImportAction.basic_info, )
+ImportAction.student_list.depends = ()
+ImportAction.final_exam_list.depends = ()
 ImportAction.grades.depends = (ImportAction.final_exam_list, ImportAction.student_list)
 ImportAction.moodle_student_list.depends = (ImportAction.student_list, )
 ImportAction.moodle_home_work_list.depends = (ImportAction.moodle_student_list, )
@@ -25,5 +23,5 @@ ImportAction.moodle_home_work_details.depends = (ImportAction.moodle_home_work_d
 ImportAction.moodle_final_exam_list.depends = (ImportAction.moodle_student_list, ImportAction.final_exam_list)
 ImportAction.moodle_final_exam_details.depends = (ImportAction.moodle_final_exam_list, )
 
-ImportAction.default = (ImportAction.basic_info, )
+ImportAction.default = ()
 ImportAction.all = frozenset(ImportAction)

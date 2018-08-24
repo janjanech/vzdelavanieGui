@@ -1,11 +1,13 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMessageBox
+from PyQt5.QtWidgets import QApplication
+from lxml.etree import xmlfile
 
 from vgrabber.importer import Importer
 from vgrabber.qtgui.importselector import ImportSelectorDialog
 from vgrabber.qtgui.login import LoginDialog
 from vgrabber.qtgui.qtcallbacks import QtCallbacks
+from vgrabber.serializer import SubjectSerializer
 
 app = QApplication(sys.argv)
 
@@ -22,4 +24,5 @@ if actions is None:
 
 with Importer(login, password, actions, QtCallbacks()) as importer:
     importer.exec()
-    print(importer.model)
+    with xmlfile(open('test/subjectinfo.xml', 'wb')) as xf:
+        xf.write(SubjectSerializer(importer.model).serialize())

@@ -14,7 +14,7 @@ class ImporterState:
         self.ui_callbacks = ui_callbacks
 
         browser_options = Options()
-        # browser_options.add_argument('--headless')
+        browser_options.add_argument('--headless')
         self.browser = Chrome(chrome_options=browser_options)
 
     def finish(self):
