@@ -1,5 +1,7 @@
 from vgrabber.importer import UiCallbacks
+from .subjectselector import SubjectSelectorDialog
 
 
 class QtCallbacks(UiCallbacks):
-    pass
+    def select_subject(self, subject_list):
+        return SubjectSelectorDialog(subject_list).exec()

@@ -1,4 +1,4 @@
-from .actionexecutors import LoginActionExecutor
+from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor
 from .importaction import ImportAction
 from .state import ImporterState
 
@@ -6,11 +6,13 @@ from .state import ImporterState
 class Importer:
     __actions = (
         (ImportAction.all, LoginActionExecutor),
+        (ImportAction.all, SelectSubjectActionExecutor),
     )
 
     def __init__(self, login, password, actions, ui_callbacks):
         self.__requested_actions = actions
         self.__state = ImporterState(login, password, actions, ui_callbacks)
+        self.model = None
 
     def __enter__(self):
         return self
@@ -21,4 +23,8 @@ class Importer:
     def exec(self):
         for for_actions, executor in self.__actions:
             if for_actions & self.__requested_actions:
-                executor(self.__state).exec()
+                e = executor(self.__state)
+                if e.condition():
+                    e.exec()
+
+        self.model = self.__state.model

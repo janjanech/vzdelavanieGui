@@ -9,7 +9,10 @@ class ImporterState:
 
         self.requested_actions = requested_actions
 
+        self.model = None
+
         self.ui_callbacks = ui_callbacks
+
         browser_options = Options()
         # browser_options.add_argument('--headless')
         self.browser = Chrome(chrome_options=browser_options)

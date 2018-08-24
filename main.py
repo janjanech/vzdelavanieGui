@@ -22,6 +22,4 @@ if actions is None:
 
 with Importer(login, password, actions, QtCallbacks()) as importer:
     importer.exec()
-    dlg = QMessageBox()
-    dlg.setText("Done")
-    dlg.exec()
+    print(importer.model)
