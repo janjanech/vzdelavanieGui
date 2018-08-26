@@ -1,4 +1,5 @@
-from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor
+from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor,\
+    StudentInfoActionExecutor
 from .importaction import ImportAction
 from .state import ImporterState
 
@@ -8,6 +9,7 @@ class Importer:
         (ImportAction.all, LoginActionExecutor),
         (ImportAction.all, SelectSubjectActionExecutor),
         ({ImportAction.final_exam_list}, FinalExamActionExecutor),
+        ({ImportAction.student_list, ImportAction.grades}, StudentInfoActionExecutor),
     )
 
     def __init__(self, login, password, actions, ui_callbacks, model=None):

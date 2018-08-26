@@ -1,3 +1,4 @@
+from .student import StudentDeserializer
 from .finalexam import FinalExamDeserializer
 from vgrabber.importer import ImportAction
 from vgrabber.model import Subject
@@ -20,5 +21,9 @@ class SubjectDeserializer:
         for finalexam_element in self.__subject_element.xpath('//finalexams/finalexam'):
             final_exam = FinalExamDeserializer(finalexam_element).deserialize()
             subject.add_final_exam(final_exam)
+
+        for student_element in self.__subject_element.xpath('//students/student'):
+            student = StudentDeserializer(student_element).deserialize()
+            subject.add_student(student)
 
         return subject

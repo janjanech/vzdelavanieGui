@@ -1,6 +1,7 @@
 from lxml.etree import Element
 
 from vgrabber.model import Subject
+from .student import StudentSerializer
 from .finalexam import FinalExamSerializer
 
 
@@ -25,6 +26,14 @@ class SubjectSerializer:
             progress_element.append(action_element)
 
         subject_element.append(progress_element)
+
+        students_element = Element('students')
+
+        for student in self.__subject.students:
+            student_element = StudentSerializer(student).serialize()
+            students_element.append(student_element)
+
+        subject_element.append(students_element)
 
         finalexams_element = Element('finalexams')
 

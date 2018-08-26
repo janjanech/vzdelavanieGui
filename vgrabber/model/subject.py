@@ -20,5 +20,11 @@ class Subject:
     def add_final_exam(self, final_exam):
         self.final_exams.append(final_exam)
 
+    def add_student(self, student):
+        self.students.append(student)
+
     def clear_final_exams(self):
         self.final_exams = []
+
+    def clear_students(self):
+        self.students.clear()
