@@ -16,3 +16,9 @@ class Subject:
 
     def finish_action(self, action):
         self.progress.add(action)
+
+    def add_final_exam(self, final_exam):
+        self.final_exams.append(final_exam)
+
+    def clear_final_exams(self):
+        self.final_exams = []

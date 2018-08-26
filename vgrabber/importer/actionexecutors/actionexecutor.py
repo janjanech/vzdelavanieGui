@@ -6,7 +6,6 @@ class ActionExecutor(ABC):
     def __init__(self, state):
         pass
 
-    @abstractmethod
     def condition(self):
         return True
 

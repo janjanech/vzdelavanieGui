@@ -12,9 +12,6 @@ class LoginActionExecutor(ActionExecutor):
 
         self.__state = state
 
-    def condition(self):
-        return True
-
     def exec(self):
         browser: Chrome = self.__state.browser
 
