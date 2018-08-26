@@ -39,5 +39,9 @@ if actions is None:
 
 with Importer(login, password, actions, QtCallbacks(), model) as importer:
     importer.exec()
-    with xmlfile(open('test/subjectinfo.xml', 'wb')) as xf:
-        xf.write(SubjectSerializer(importer.model).serialize())
+    with xmlfile(open('test/subjectinfo.xml', 'wb'), encoding='utf-8') as xf:
+        xf.write_declaration()
+        xf.write(
+            SubjectSerializer(importer.model).serialize(),
+            pretty_print=True
+        )
