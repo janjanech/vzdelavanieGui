@@ -35,6 +35,6 @@ class FinalExamActionExecutor(ActionExecutor):
                 .get_attribute("href")
             id_base64 = id_href.split('pid=')[1]
 
-            id = base64.b64decode(id_base64).decode('ascii').split('-')[3]
+            id = int(base64.b64decode(id_base64).decode('ascii').split('-')[3])
 
             model.add_final_exam(FinalExam(date_time, room, id))
