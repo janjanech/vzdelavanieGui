@@ -18,4 +18,12 @@ class StudentSerializer:
             group=self.__student.group,
         )
 
+        for grade in self.__student.grades:
+            finalexam_element = Element(
+                'finalexam',
+                id=str(grade.final_exam.id),
+                grade=grade.grade.name
+            )
+            student_element.append(finalexam_element)
+
         return student_element

@@ -1,7 +1,9 @@
+import datetime
+
 from seleniumrequests import Chrome
 
 from ..importaction import ImportAction
-from vgrabber.model import Subject, Student
+from vgrabber.model import Subject, Student, Grade, StudentGrade
 from .actionexecutor import ActionExecutor
 
 
@@ -33,4 +35,28 @@ class StudentInfoActionExecutor(ActionExecutor):
                 model.add_student(Student(number, name, surname, group))
 
         if import_grades:
-            pass
+            students = {student.number: student for student in model.students}
+
+            for student in model.students:
+                student.clear_grades()
+
+            for final_exam in model.final_exams:
+                participants_data = browser.request(
+                    'GET',
+                    'https://vzdelavanie.uniza.sk/vzdelavanie/znpredmet.php?act=term&trm={0}'.format(final_exam.id)
+                ).json()
+
+                if 'pole' not in participants_data:
+                    continue
+
+                for participant in participants_data['pole']:
+                    student = students[participant[0]]
+
+                    for idx in (7, 9, 11):
+                        if participant[idx]:
+                            parsed_date = datetime.datetime.strptime(participant[idx], "%d.%m.%Y").date()
+                            if parsed_date == final_exam.date_time.date():
+                                student.add_grade(StudentGrade(final_exam, Grade[participant[idx + 1]]))
+                                break
+                    else:
+                        student.add_grade(StudentGrade(final_exam, Grade.FX))

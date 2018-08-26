@@ -23,7 +23,7 @@ class SubjectDeserializer:
             subject.add_final_exam(final_exam)
 
         for student_element in self.__subject_element.xpath('//students/student'):
-            student = StudentDeserializer(student_element).deserialize()
+            student = StudentDeserializer(subject.final_exams, student_element).deserialize()
             subject.add_student(student)
 
         return subject
