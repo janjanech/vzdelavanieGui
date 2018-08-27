@@ -28,7 +28,7 @@ class StudentInfoActionExecutor(ActionExecutor):
         if import_list:
             model.clear_students()
             for row in browser.find_elements_by_xpath('//table[@class="data"]//tr[not(./th)]'):
-                name, surname = row.find_element_by_xpath('.//td[2]//b').text.lstrip('*+-').split(None, 1)
+                surname, name = row.find_element_by_xpath('.//td[2]//b').text.lstrip('*+-').split(None, 1)
                 group = row.find_element_by_xpath('.//td[1]').text
                 number = row.find_element_by_xpath('.//td[3]').text
 
