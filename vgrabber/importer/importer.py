@@ -10,7 +10,7 @@ class Importer:
         (ImportAction.all, SelectSubjectActionExecutor),
         ({ImportAction.final_exam_list}, FinalExamActionExecutor),
         ({ImportAction.student_list, ImportAction.grades}, StudentInfoActionExecutor),
-        ({ImportAction.moodle_student_list}, MoodleStudentListActionExecutor)
+        ({ImportAction.moodle_student_list, ImportAction.moodle_teacher_list}, MoodleStudentListActionExecutor)
     )
 
     def __init__(self, login, password, actions, ui_callbacks, model=None):

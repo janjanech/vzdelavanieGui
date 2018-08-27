@@ -7,6 +7,7 @@ class ImportAction(Enum):
     grades = auto()
     moodle_teacher_list = auto()
     moodle_student_list = auto()
+    moodle_teacher_groups = auto()
     moodle_home_work_list = auto()
     moodle_home_work_grades = auto()
     moodle_home_work_details = auto()
@@ -19,6 +20,7 @@ ImportAction.student_list.depends = set()
 ImportAction.final_exam_list.depends = set()
 ImportAction.grades.depends = {ImportAction.final_exam_list, ImportAction.student_list}
 ImportAction.moodle_teacher_list.depends = set()
+ImportAction.moodle_teacher_groups.depends = {ImportAction.moodle_teacher_list}
 ImportAction.moodle_student_list.depends = {ImportAction.student_list}
 ImportAction.moodle_home_work_list.depends = {ImportAction.moodle_student_list}
 ImportAction.moodle_home_work_grades.depends = {ImportAction.moodle_home_work_list}

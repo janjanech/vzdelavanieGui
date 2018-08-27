@@ -6,7 +6,8 @@ class ProgressChecker:
         (ImportAction.student_list, '//students/student'),
         (ImportAction.final_exam_list, '//finalexams/finalexam'),
         (ImportAction.grades, '//student/finalexam[@grade]'),
-        (ImportAction.moodle_student_list, '//students/student[@moodleid]')
+        (ImportAction.moodle_student_list, '//students/student[@moodleid]'),
+        (ImportAction.moodle_teacher_list, '//teachers/teacher')
     )
 
     def __init__(self, subject_element):

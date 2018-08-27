@@ -1,3 +1,4 @@
+from .teacher import TeacherDeserializer
 from .progresschecker import ProgressChecker
 from .student import StudentDeserializer
 from .finalexam import FinalExamDeserializer
@@ -26,5 +27,9 @@ class SubjectDeserializer:
         for student_element in self.__subject_element.xpath('//students/student'):
             student = StudentDeserializer(subject.final_exams, student_element).deserialize()
             subject.add_student(student)
+
+        for teacher_element in self.__subject_element.xpath('//teachers/teacher'):
+            teacher = TeacherDeserializer(teacher_element).deserialize()
+            subject.add_teacher(teacher)
 
         return subject

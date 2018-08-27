@@ -5,7 +5,7 @@ import logging
 from seleniumrequests import Chrome
 
 from ..importaction import ImportAction
-from vgrabber.model import Subject, Student
+from vgrabber.model import Subject, Student, Teacher
 from .moodleactionexecutor import MoodleActionExecutor
 
 
@@ -76,3 +76,28 @@ class MoodleStudentListActionExecutor(MoodleActionExecutor):
                 if not any(browser.find_elements_by_link_text("Ďalší")):
                     break
                 browser.find_element_by_link_text("Ďalší").click()
+
+        if import_teachers:
+            browser.find_element_by_xpath("//select[@name='role']/option[text()='Učiteľ']").click()
+            browser.find_element_by_css_selector("input#id_submitbutton").click()
+
+            model.clear_teachers()
+
+            while True:
+                for row in browser.find_elements_by_css_selector('tr.userinforow'):
+                    img_link = row.find_element_by_xpath(".//a[contains(img/@class, 'userpicture')]")
+                    img_link_parsed = urlparse(img_link.get_attribute('href'))
+
+                    moodle_id = int(parse_qs(img_link_parsed.query)['id'][0])
+
+                    name, surname = row.find_element_by_css_selector('div.subfield_userfullnamedisplay').text.rsplit(None, 1)
+
+                    email = row.find_element_by_css_selector('div.subfield_email').text
+
+                    teacher = Teacher(name, surname, moodle_id, email)
+                    model.add_teacher(teacher)
+
+                if not any(browser.find_elements_by_link_text("Ďalší")):
+                    break
+                browser.find_element_by_link_text("Ďalší").click()
+

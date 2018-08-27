@@ -23,8 +23,14 @@ class Subject:
     def add_student(self, student):
         self.students.append(student)
 
+    def add_teacher(self, teacher):
+        self.teachers.append(teacher)
+
     def clear_final_exams(self):
         self.final_exams = []
 
     def clear_students(self):
         self.students.clear()
+
+    def clear_teachers(self):
+        self.teachers.clear()
