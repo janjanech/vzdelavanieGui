@@ -19,14 +19,6 @@ class SubjectSerializer:
             year=self.__subject.year
         )
 
-        progress_element = Element('progress')
-
-        for action in self.__subject.progress:
-            action_element = Element('finished', action=action.name)
-            progress_element.append(action_element)
-
-        subject_element.append(progress_element)
-
         students_element = Element('students')
 
         for student in self.__subject.students:

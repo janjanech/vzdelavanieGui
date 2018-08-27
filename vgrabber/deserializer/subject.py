@@ -1,3 +1,4 @@
+from .progresschecker import ProgressChecker
 from .student import StudentDeserializer
 from .finalexam import FinalExamDeserializer
 from vgrabber.importer import ImportAction
@@ -15,8 +16,8 @@ class SubjectDeserializer:
             self.__subject_element.attrib['year']
         )
 
-        for action_element in self.__subject_element.xpath('//progress/finished'):
-            subject.finish_action(ImportAction[action_element.attrib['action']])
+        for action in ProgressChecker(self.__subject_element).find_out_progress():
+            subject.finish_action(action)
 
         for finalexam_element in self.__subject_element.xpath('//finalexams/finalexam'):
             final_exam = FinalExamDeserializer(finalexam_element).deserialize()
