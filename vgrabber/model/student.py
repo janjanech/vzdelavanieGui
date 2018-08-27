@@ -5,6 +5,9 @@ class Student:
         self.surname = surname
         self.group = group
         self.grades = []
+        self.moodle_id = None
+        self.moodle_group = None
+        self.moodle_email = None
 
     def __str__(self):
         graded = ""

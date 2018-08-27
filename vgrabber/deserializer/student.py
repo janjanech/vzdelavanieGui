@@ -8,11 +8,18 @@ class StudentDeserializer:
 
     def deserialize(self):
         student = Student(
-            self.__student_element.attrib["number"],
-            self.__student_element.attrib["name"],
-            self.__student_element.attrib["surname"],
-            self.__student_element.attrib["group"],
+            self.__student_element.attrib.get('number'),
+            self.__student_element.attrib['name'],
+            self.__student_element.attrib['surname'],
+            self.__student_element.attrib.get('group'),
         )
+
+        if 'moodleid' in self.__student_element.attrib:
+            student.moodle_id = int(self.__student_element.attrib['moodleid'])
+        if 'moodlegroup' in self.__student_element.attrib:
+            student.moodle_group = int(self.__student_element.attrib['moodlegroup'])
+        if 'moodleemail' in self.__student_element.attrib:
+            student.moodle_email = self.__student_element.attrib['moodleemail']
 
         for finalexam_element in self.__student_element.xpath('.//finalexam'):
             grade = StudentGrade(

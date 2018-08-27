@@ -10,12 +10,23 @@ class StudentSerializer:
         self.__student = student
 
     def serialize(self):
+        optional_info = {}
+        if self.__student.moodle_id is not None:
+            optional_info['moodleid'] = str(self.__student.moodle_id)
+        if self.__student.moodle_group is not None:
+            optional_info['moodlegroup'] = str(self.__student.moodle_group)
+        if self.__student.moodle_email is not None:
+            optional_info['moodleemail'] = self.__student.moodle_email
+        if self.__student.group is not None:
+            optional_info['group'] = self.__student.group
+        if self.__student.number is not None:
+            optional_info['number'] = self.__student.number
+
         student_element = Element(
             'student',
-            number=self.__student.number,
             name=self.__student.name,
             surname=self.__student.surname,
-            group=self.__student.group,
+            **optional_info
         )
 
         for grade in self.__student.grades:
