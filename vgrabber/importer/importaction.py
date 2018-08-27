@@ -10,6 +10,7 @@ class ImportAction(Enum):
     moodle_home_work_grades = auto()
     moodle_home_work_details = auto()
     moodle_final_exam_list = auto()
+    moodle_final_exam_grades = auto()
     moodle_final_exam_details = auto()
 
 
@@ -21,7 +22,8 @@ ImportAction.moodle_home_work_list.depends = (ImportAction.moodle_student_list, 
 ImportAction.moodle_home_work_grades.depends = (ImportAction.moodle_home_work_list, )
 ImportAction.moodle_home_work_details.depends = (ImportAction.moodle_home_work_grades, )
 ImportAction.moodle_final_exam_list.depends = (ImportAction.moodle_student_list, ImportAction.final_exam_list)
-ImportAction.moodle_final_exam_details.depends = (ImportAction.moodle_final_exam_list, )
+ImportAction.moodle_final_exam_grades.depends = (ImportAction.moodle_final_exam_list, )
+ImportAction.moodle_final_exam_details.depends = (ImportAction.moodle_final_exam_grades, )
 
 ImportAction.default = ()
 ImportAction.all = frozenset(ImportAction)
