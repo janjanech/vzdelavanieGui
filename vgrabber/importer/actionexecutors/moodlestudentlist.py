@@ -46,12 +46,10 @@ class MoodleStudentListActionExecutor(MoodleActionExecutor):
                     img_link_parsed = urlparse(img_link.get_attribute('href'))
                     moodle_id = int(parse_qs(img_link_parsed.query)['id'][0])
 
+                    moodle_group = None
                     for group in row.find_elements_by_css_selector("div.group"):
                         moodle_group = int(group.get_attribute('rel'))
                         break
-                    else:
-                        # skip students with no group
-                        continue
 
                     name, surname = row.find_element_by_css_selector('div.subfield_userfullnamedisplay').text.rsplit(None, 1)
                     name_s, surname_s = self.__strip_accents(name), self.__strip_accents(surname)
@@ -63,6 +61,10 @@ class MoodleStudentListActionExecutor(MoodleActionExecutor):
                     elif (name_s, surname_s) in students_fullname_index:
                         student = students_fullname_index[(name_s, surname_s)]
                     else:
+                        if moodle_group is None:
+                            # don't create students if they are not in any group
+                            continue
+
                         student = Student(None, name, surname, None)
                         model.add_student(student)
                         logging.log(logging.WARN, "Student {0} not found in the student list".format(student))
