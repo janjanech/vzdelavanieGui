@@ -1,5 +1,4 @@
 import unicodedata
-from itertools import groupby
 from urllib.parse import urlparse, parse_qs
 
 import logging
@@ -38,12 +37,6 @@ class MoodleStudentListActionExecutor(MoodleActionExecutor):
             students_fullname_index = {(student[1], student[0]): student[2] for student in students}
             students_fullname_index.update({(student[0], student[1]): student[2] for student in students})
 
-            # students_surname_index = {}
-            # for surname, student_group in groupby(sorted(students), lambda x: x[0]):
-            #     student_group = list(student_group)
-            #     if len(student_group) == 1:
-            #         students_surname_index[surname] = student_group[0][2]
-
             browser.find_element_by_xpath("//select[@name='role']/option[text()='Študent']").click()
             browser.find_element_by_css_selector("input#id_submitbutton").click()
 
@@ -69,12 +62,6 @@ class MoodleStudentListActionExecutor(MoodleActionExecutor):
                         student = students_fullname_index[(surname_s, name_s)]
                     elif (name_s, surname_s) in students_fullname_index:
                         student = students_fullname_index[(name_s, surname_s)]
-                    # elif surname_s in students_surname_index:
-                    #     student = students_surname_index[surname_s]
-                    #     logging.log(
-                    #         logging.WARN,
-                    #         "Student {0} found only by surname {1} (name was {2})".format(student, surname, name)
-                    #     )
                     else:
                         student = Student(None, name, surname, None)
                         model.add_student(student)
