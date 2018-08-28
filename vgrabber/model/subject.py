@@ -26,6 +26,9 @@ class Subject:
     def add_teacher(self, teacher):
         self.teachers.append(teacher)
 
+    def add_test(self, test):
+        self.tests.append(test)
+
     def clear_final_exams(self):
         self.final_exams = []
 
@@ -35,7 +38,15 @@ class Subject:
     def clear_teachers(self):
         self.teachers.clear()
 
+    def clear_tests(self):
+        self.tests.clear()
+
     def get_final_exam_by_date_time(self, date_time):
         for final_exam in self.final_exams:
             if final_exam.date_time == date_time:
                 return final_exam
+
+    def get_test_by_id(self, item_id):
+        for test in self.tests:
+            if test.id == item_id:
+                return test

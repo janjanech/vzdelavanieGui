@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qs
 from seleniumrequests import Chrome
 
 from ..importaction import ImportAction
-from vgrabber.model import Subject
+from vgrabber.model import Subject, Test
 from vgrabber.utilities.accents import strip_accents
 from .actionexecutor import ActionExecutor
 
@@ -29,6 +29,9 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
 
         grade_items = []
 
+        if self.__import_tests:
+            model.clear_tests()
+
         for category in browser.find_elements_by_css_selector('.gradeitemheader'):
             if category.tag_name == 'a':
                 href = urlparse(category.get_attribute('href'))
@@ -36,7 +39,7 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
                 item_name = category.text
                 if '/quiz/' in href.path:
                     item_id = int(href_query["id"][0])
-                    grade_items.append((item_id, "test", item_name))
+                    grade_items.append(self.__get_test(item_name, item_id))
                 elif '/assign/' in href.path:
                     item_id = int(href_query["id"][0])
                     if 'skuska' in strip_accents(item_name).lower():
@@ -81,3 +84,13 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
 
     def __get_final_exam_by_date_rev(self, year, month, day, hour, minute):
         return self.__get_final_exam_by_date(day, month, year, hour, minute)
+
+    def __get_test(self, item_name, item_id):
+        model: Subject = self.__state.model
+
+        if self.__import_tests:
+            test = Test(item_id, item_name, item_id)
+            model.add_test(test)
+            return test
+        else:
+            return model.get_test_by_id(item_id)
