@@ -1,6 +1,7 @@
 from lxml.etree import Element
 
 from vgrabber.model import Subject
+from vgrabber.serializer.homeworkcategory import HomeWorkCategorySerializer
 from .test import TestSerializer
 from .teacher import TeacherSerializer
 from .student import StudentSerializer
@@ -36,6 +37,14 @@ class SubjectSerializer:
             teachers_element.append(teacher_element)
 
         subject_element.append(teachers_element)
+
+        homeworks_element = Element('homeworks')
+
+        for home_work_category in self.__subject.home_work_categories:
+            category_element = HomeWorkCategorySerializer(home_work_category).serialize()
+            homeworks_element.append(category_element)
+
+        subject_element.append(homeworks_element)
 
         tests_element = Element('tests')
 

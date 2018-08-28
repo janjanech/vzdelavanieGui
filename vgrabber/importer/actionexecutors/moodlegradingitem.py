@@ -5,7 +5,7 @@ from urllib.parse import urlparse, parse_qs
 from seleniumrequests import Chrome
 
 from ..importaction import ImportAction
-from vgrabber.model import Subject, Test
+from vgrabber.model import Subject, Test, HomeWork
 from vgrabber.utilities.accents import strip_accents
 from .actionexecutor import ActionExecutor
 
@@ -32,6 +32,9 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
         if self.__import_tests:
             model.clear_tests()
 
+        if self.__import_home_works:
+            model.clear_home_works()
+
         for category in browser.find_elements_by_css_selector('.gradeitemheader'):
             if category.tag_name == 'a':
                 href = urlparse(category.get_attribute('href'))
@@ -45,7 +48,7 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
                     if 'skuska' in strip_accents(item_name).lower():
                         grade_items.append(self.__get_final_exam(item_name, item_id))
                     else:
-                        grade_items.append((item_id, "homework", item_name))
+                        grade_items.append(self.__get_home_work(item_name, item_id))
                 else:
                     grade_items.append(None)
             else:
@@ -94,3 +97,13 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
             return test
         else:
             return model.get_test_by_id(item_id)
+
+    def __get_home_work(self, item_name, item_id):
+        model: Subject = self.__state.model
+
+        if self.__import_home_works:
+            home_work = HomeWork(item_id, item_name, item_id)
+            model.add_home_work_to_category(home_work)
+            return home_work
+        else:
+            return model.get_home_work_by_id(item_id)

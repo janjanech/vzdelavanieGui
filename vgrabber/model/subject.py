@@ -1,3 +1,6 @@
+from .homework import HomeWorkCategory
+
+
 class Subject:
     def __init__(self, number, name, year):
         self.number = number
@@ -7,7 +10,7 @@ class Subject:
         self.start_date = None
         self.students = []
         self.teachers = []
-        self.homeworks = []
+        self.home_work_categories = []
         self.tests = []
         self.final_exams = []
 
@@ -29,6 +32,16 @@ class Subject:
     def add_test(self, test):
         self.tests.append(test)
 
+    def add_home_work_to_category(self, home_work, category='unknown'):
+        for found_category in self.home_work_categories:
+            if found_category.name == category:
+                break
+        else:
+            found_category = HomeWorkCategory(category)
+            self.home_work_categories.append(found_category)
+
+        found_category.add_home_work(home_work)
+
     def clear_final_exams(self):
         self.final_exams = []
 
@@ -41,6 +54,10 @@ class Subject:
     def clear_tests(self):
         self.tests.clear()
 
+    def clear_home_works(self):
+        for category in self.home_work_categories:
+            category.clear_home_works()
+
     def get_final_exam_by_date_time(self, date_time):
         for final_exam in self.final_exams:
             if final_exam.date_time == date_time:
@@ -50,3 +67,9 @@ class Subject:
         for test in self.tests:
             if test.id == item_id:
                 return test
+
+    def get_home_work_by_id(self, item_id):
+        for home_work_category in self.home_work_categories:
+            for home_work in home_work_category.home_works:
+                if home_work.id == item_id:
+                    return home_work
