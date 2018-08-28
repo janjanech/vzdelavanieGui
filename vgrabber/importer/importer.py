@@ -1,5 +1,6 @@
-from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor,\
-    StudentInfoActionExecutor, MoodleStudentListActionExecutor, SwitchToMoodleActionExecutor
+from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor, \
+    StudentInfoActionExecutor, MoodleStudentListActionExecutor, SwitchToMoodleActionExecutor, \
+    MoodleGradingItemActionExecutor
 from .importaction import ImportAction
 from .state import ImporterState
 
@@ -11,7 +12,15 @@ class Importer:
         ({ImportAction.final_exam_list}, FinalExamActionExecutor),
         ({ImportAction.student_list, ImportAction.grades}, StudentInfoActionExecutor),
         (ImportAction.moodle_all, SwitchToMoodleActionExecutor),
-        ({ImportAction.moodle_student_list, ImportAction.moodle_teacher_list}, MoodleStudentListActionExecutor)
+        ({ImportAction.moodle_student_list, ImportAction.moodle_teacher_list}, MoodleStudentListActionExecutor),
+        (
+            {
+                ImportAction.moodle_home_work_list, ImportAction.moodle_home_work_grades,
+                ImportAction.moodle_test_list, ImportAction.moodle_test_grades,
+                ImportAction.moodle_final_exam_list, ImportAction.moodle_final_exam_grades
+            },
+            MoodleGradingItemActionExecutor
+        ),
     )
 
     def __init__(self, login, password, actions, ui_callbacks, model=None):
@@ -31,7 +40,5 @@ class Importer:
                 e = executor(self.__state)
                 if e.condition():
                     e.exec()
-
-        self.__state.finish_actions()
 
         self.model = self.__state.model

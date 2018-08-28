@@ -34,3 +34,8 @@ class Subject:
 
     def clear_teachers(self):
         self.teachers.clear()
+
+    def get_final_exam_by_date_time(self, date_time):
+        for final_exam in self.final_exams:
+            if final_exam.date_time == date_time:
+                return final_exam

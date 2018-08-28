@@ -17,4 +17,9 @@ class FinalExamDeserializer:
 
         room = self.__finalexam_element.attrib['room']
 
-        return FinalExam(date_time, room, id)
+        final_exam = FinalExam(date_time, room, id)
+
+        if 'moodleid' in self.__finalexam_element.attrib:
+            final_exam.moodle_id = self.__finalexam_element.attrib['moodleid']
+
+        return final_exam

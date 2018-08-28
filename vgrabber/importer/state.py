@@ -10,6 +10,7 @@ class ImporterState:
         self.requested_actions = requested_actions
 
         self.model = model
+        self.grade_items = ()
 
         self.ui_callbacks = ui_callbacks
 
@@ -21,6 +22,5 @@ class ImporterState:
         self.browser.quit()
         del self.browser
 
-    def finish_actions(self):
-        for action in self.requested_actions:
-            self.model.finish_action(action)
+    def use_grade_items(self, grade_items):
+        self.grade_items = tuple(grade_items)

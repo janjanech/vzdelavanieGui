@@ -1,9 +1,9 @@
-import unicodedata
 from urllib.parse import urlparse, parse_qs
 
 import logging
 from seleniumrequests import Chrome
 
+from vgrabber.utilities.accents import strip_accents
 from .actionexecutor import ActionExecutor
 from ..importaction import ImportAction
 from vgrabber.model import Subject, Student, Teacher
@@ -13,10 +13,6 @@ class MoodleStudentListActionExecutor(ActionExecutor):
     def __init__(self, state):
         super().__init__(state)
         self.__state = state
-
-    @staticmethod
-    def __strip_accents(s):
-        return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
 
     def exec(self):
         browser: Chrome = self.__state.browser
@@ -30,7 +26,7 @@ class MoodleStudentListActionExecutor(ActionExecutor):
 
         if import_students:
             students = [
-                (self.__strip_accents(student.surname), self.__strip_accents(student.name), student)
+                (strip_accents(student.surname), strip_accents(student.name), student)
                     for student in model.students
             ]
 
@@ -52,7 +48,7 @@ class MoodleStudentListActionExecutor(ActionExecutor):
                         break
 
                     name, surname = row.find_element_by_css_selector('div.subfield_userfullnamedisplay').text.rsplit(None, 1)
-                    name_s, surname_s = self.__strip_accents(name), self.__strip_accents(surname)
+                    name_s, surname_s = strip_accents(name), strip_accents(surname)
 
                     email = row.find_element_by_css_selector('div.subfield_email').text
 

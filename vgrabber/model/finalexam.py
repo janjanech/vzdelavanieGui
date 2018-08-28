@@ -3,6 +3,7 @@ class FinalExam:
         self.date_time = date_time
         self.room = room
         self.id = id
+        self.moodle_id = None
 
     def __str__(self):
         return "<FinalExam {0} at {1} in room {2}>".format(self.id, self.date_time.isoformat(), self.room)

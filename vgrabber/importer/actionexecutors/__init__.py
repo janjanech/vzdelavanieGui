@@ -4,3 +4,4 @@ from .finalexam import FinalExamActionExecutor
 from .studentinfo import StudentInfoActionExecutor
 from .switchtomoodle import SwitchToMoodleActionExecutor
 from .moodlestudentlist import MoodleStudentListActionExecutor
+from .moodlegradingitem import MoodleGradingItemActionExecutor
