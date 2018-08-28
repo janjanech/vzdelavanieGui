@@ -4,12 +4,12 @@ from urllib.parse import urlparse, parse_qs
 import logging
 from seleniumrequests import Chrome
 
+from .actionexecutor import ActionExecutor
 from ..importaction import ImportAction
 from vgrabber.model import Subject, Student, Teacher
-from .moodleactionexecutor import MoodleActionExecutor
 
 
-class MoodleStudentListActionExecutor(MoodleActionExecutor):
+class MoodleStudentListActionExecutor(ActionExecutor):
     def __init__(self, state):
         super().__init__(state)
         self.__state = state
@@ -18,7 +18,7 @@ class MoodleStudentListActionExecutor(MoodleActionExecutor):
     def __strip_accents(s):
         return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
 
-    def exec_in_moodle(self):
+    def exec(self):
         browser: Chrome = self.__state.browser
         model: Subject = self.__state.model
 

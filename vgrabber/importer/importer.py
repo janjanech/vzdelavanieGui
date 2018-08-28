@@ -1,5 +1,5 @@
 from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor,\
-    StudentInfoActionExecutor, MoodleStudentListActionExecutor
+    StudentInfoActionExecutor, MoodleStudentListActionExecutor, SwitchToMoodleActionExecutor
 from .importaction import ImportAction
 from .state import ImporterState
 
@@ -10,6 +10,7 @@ class Importer:
         (ImportAction.all, SelectSubjectActionExecutor),
         ({ImportAction.final_exam_list}, FinalExamActionExecutor),
         ({ImportAction.student_list, ImportAction.grades}, StudentInfoActionExecutor),
+        (ImportAction.moodle_all, SwitchToMoodleActionExecutor),
         ({ImportAction.moodle_student_list, ImportAction.moodle_teacher_list}, MoodleStudentListActionExecutor)
     )
 

@@ -37,3 +37,4 @@ ImportAction.moodle_final_exam_details.depends = {ImportAction.moodle_final_exam
 
 ImportAction.default = ()
 ImportAction.all = frozenset(ImportAction)
+ImportAction.moodle_all = frozenset(x for x in ImportAction if x.name.startswith('moodle_'))

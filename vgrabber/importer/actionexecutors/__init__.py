@@ -2,4 +2,5 @@ from .login import LoginActionExecutor
 from .selectsubject import SelectSubjectActionExecutor
 from .finalexam import FinalExamActionExecutor
 from .studentinfo import StudentInfoActionExecutor
+from .switchtomoodle import SwitchToMoodleActionExecutor
 from .moodlestudentlist import MoodleStudentListActionExecutor
