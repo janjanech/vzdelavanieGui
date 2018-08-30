@@ -1,3 +1,6 @@
+import os.path
+
+from vgrabber.utilities.accents import strip_accents
 from .grade import StudentGrade
 from .homeworkpoints import HomeWorkPoints
 from .testpoints import TestPoints
@@ -59,3 +62,12 @@ class Student:
 
     def clear_test_points(self):
         self.test_points.clear()
+
+    def save(self, directory):
+        for grade in self.grades:
+            grade.save(
+                os.path.join(
+                    directory,
+                    '{0}_{1}{2}'.format(self.number, strip_accents(self.surname), strip_accents(self.name))
+                )
+            )

@@ -94,14 +94,6 @@ class Subject:
             if student.moodle_email == moodle_email:
                 return student
 
-    def clear_final_exam_points(self):
+    def save(self, directory):
         for student in self.students:
-            student.clear_final_exam_points()
-
-    def clear_home_work_points(self):
-        for student in self.students:
-            student.clear_home_work_points()
-
-    def clear_test_points(self):
-        for student in self.students:
-            student.clear_test_points()
+            student.save(directory)
