@@ -1,9 +1,9 @@
+from .homeworkcategory import HomeWorkCategoryDeserializer
 from .test import TestDeserializer
 from .teacher import TeacherDeserializer
 from .progresschecker import ProgressChecker
 from .student import StudentDeserializer
 from .finalexam import FinalExamDeserializer
-from vgrabber.importer import ImportAction
 from vgrabber.model import Subject
 
 
@@ -36,5 +36,9 @@ class SubjectDeserializer:
         for test_element in self.__subject_element.xpath('//tests/test'):
             test = TestDeserializer(test_element).deserialize()
             subject.add_test(test)
+
+        for category_element in self.__subject_element.xpath('//homeworks/category'):
+            home_work_category = HomeWorkCategoryDeserializer(category_element).deserialize()
+            subject.add_home_work_category(home_work_category)
 
         return subject

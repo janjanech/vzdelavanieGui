@@ -73,3 +73,6 @@ class Subject:
             for home_work in home_work_category.home_works:
                 if home_work.id == item_id:
                     return home_work
+
+    def add_home_work_category(self, home_work_category):
+        self.home_work_categories.append(home_work_category)
