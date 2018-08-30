@@ -1,6 +1,6 @@
 from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor, \
     StudentInfoActionExecutor, MoodleStudentListActionExecutor, SwitchToMoodleActionExecutor, \
-    MoodleGradingItemActionExecutor, MoodleGradesActionExecutor
+    MoodleGradingItemActionExecutor, MoodleGradesActionExecutor, FileDownloaderActionExecutor
 from .importaction import ImportAction
 from .state import ImporterState
 
@@ -27,7 +27,14 @@ class Importer:
                 ImportAction.moodle_final_exam_grades
             },
             MoodleGradesActionExecutor
-        )
+        ),
+        (
+            {
+                ImportAction.moodle_home_work_details, ImportAction.moodle_test_details,
+                ImportAction.moodle_final_exam_details
+            },
+            FileDownloaderActionExecutor
+        ),
     )
 
     def __init__(self, login, password, actions, ui_callbacks, model=None):

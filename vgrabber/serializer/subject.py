@@ -11,8 +11,9 @@ from .finalexam import FinalExamSerializer
 class SubjectSerializer:
     __subject: Subject
 
-    def __init__(self, subject):
+    def __init__(self, subject, path):
         self.__subject = subject
+        self.__path = path
 
     def serialize(self):
         subject_element = Element(
@@ -25,7 +26,7 @@ class SubjectSerializer:
         students_element = Element('students')
 
         for student in self.__subject.students:
-            student_element = StudentSerializer(student).serialize()
+            student_element = StudentSerializer(student, self.__path).serialize()
             students_element.append(student_element)
 
         subject_element.append(students_element)

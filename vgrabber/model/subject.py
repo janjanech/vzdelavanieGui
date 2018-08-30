@@ -94,6 +94,11 @@ class Subject:
             if student.moodle_email == moodle_email:
                 return student
 
+    def get_student_by_moodle_id(self, moodle_id):
+        for student in self.students:
+            if student.moodle_id == moodle_id:
+                return student
+
     def save(self, directory):
         for student in self.students:
             student.save(directory)

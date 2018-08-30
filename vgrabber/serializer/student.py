@@ -1,3 +1,5 @@
+from os.path import relpath
+
 from lxml.etree import Element
 
 from vgrabber.model import Student
@@ -6,8 +8,9 @@ from vgrabber.model import Student
 class StudentSerializer:
     __student: Student
 
-    def __init__(self, student):
+    def __init__(self, student, path):
         self.__student = student
+        self.__path = path
 
     def serialize(self):
         optional_info = {}
@@ -58,6 +61,16 @@ class StudentSerializer:
                 id=str(grade.final_exam.id),
                 **optional_info
             )
+
+            for file in grade.files:
+                file_element = Element(
+                    'file',
+                    path=relpath(file.file_path, self.__path),
+                    filename=file.file_name
+                )
+
+                finalexam_element.append(file_element)
+
             student_element.append(finalexam_element)
 
         return student_element

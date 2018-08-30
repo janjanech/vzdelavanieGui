@@ -45,6 +45,6 @@ with Importer(login, password, actions, QtCallbacks(), model) as importer:
     with xmlfile(open('test/subjectinfo.xml', 'wb'), encoding='utf-8') as xf:
         xf.write_declaration()
         xf.write(
-            SubjectSerializer(importer.model).serialize(),
+            SubjectSerializer(importer.model, 'test').serialize(),
             pretty_print=True
         )

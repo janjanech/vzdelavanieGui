@@ -1,20 +1,19 @@
 import os.path
 
-from .files import InMemoryFile
+from .files import FileList
 
 
 class TestPoints:
     def __init__(self, test, points):
         self.test = test
         self.points = points
-        self.file = None
+        self.files = FileList()
 
     def save(self, directory):
-        if isinstance(self.file, InMemoryFile):
-            self.file = self.file.save(
-                os.path.join(
-                    directory,
-                    'tests',
-                    str(self.test.id)
-                )
+        self.files.save(
+            os.path.join(
+                directory,
+                'tests',
+                str(self.test.id)
             )
+        )

@@ -50,6 +50,16 @@ class Student:
             grade.points = points
             self.grades.append(grade)
 
+    def add_final_exam_file(self, final_exam, file):
+        for grade in self.grades:
+            if grade.final_exam == final_exam:
+                grade.files.add_file(file)
+                break
+        else:
+            grade = StudentGrade(final_exam, None)
+            grade.files.add_file(file)
+            self.grades.append(grade)
+
     def clear_grades(self):
         self.grades.clear()
 
