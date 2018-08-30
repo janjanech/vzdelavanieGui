@@ -11,6 +11,9 @@ class ProgressChecker:
         (ImportAction.moodle_final_exam_list, '//finalexams/finalexam[@moodleid]'),
         (ImportAction.moodle_test_list, '//tests/test'),
         (ImportAction.moodle_home_work_list, '//homeworks/category/homework'),
+        (ImportAction.moodle_final_exam_grades, '//student/finalexam[@points]'),
+        (ImportAction.moodle_home_work_grades, '//student/homework[@points]'),
+        (ImportAction.moodle_test_grades, '//student/test[@points]'),
     )
 
     def __init__(self, subject_element):

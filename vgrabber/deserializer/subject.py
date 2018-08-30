@@ -25,14 +25,6 @@ class SubjectDeserializer:
             final_exam = FinalExamDeserializer(finalexam_element).deserialize()
             subject.add_final_exam(final_exam)
 
-        for student_element in self.__subject_element.xpath('//students/student'):
-            student = StudentDeserializer(subject.final_exams, student_element).deserialize()
-            subject.add_student(student)
-
-        for teacher_element in self.__subject_element.xpath('//teachers/teacher'):
-            teacher = TeacherDeserializer(teacher_element).deserialize()
-            subject.add_teacher(teacher)
-
         for test_element in self.__subject_element.xpath('//tests/test'):
             test = TestDeserializer(test_element).deserialize()
             subject.add_test(test)
@@ -40,5 +32,23 @@ class SubjectDeserializer:
         for category_element in self.__subject_element.xpath('//homeworks/category'):
             home_work_category = HomeWorkCategoryDeserializer(category_element).deserialize()
             subject.add_home_work_category(home_work_category)
+
+        for student_element in self.__subject_element.xpath('//students/student'):
+            home_works = [
+                home_work
+                    for home_work_category in subject.home_work_categories
+                        for home_work in home_work_category.home_works
+            ]
+            student = StudentDeserializer(
+                subject.tests,
+                home_works,
+                subject.final_exams,
+                student_element
+            ).deserialize()
+            subject.add_student(student)
+
+        for teacher_element in self.__subject_element.xpath('//teachers/teacher'):
+            teacher = TeacherDeserializer(teacher_element).deserialize()
+            subject.add_teacher(teacher)
 
         return subject

@@ -58,6 +58,18 @@ class Subject:
         for category in self.home_work_categories:
             category.clear_home_works()
 
+    def clear_final_exam_points(self):
+        for student in self.students:
+            student.clear_final_exam_points()
+
+    def clear_home_work_points(self):
+        for student in self.students:
+            student.clear_home_work_points()
+
+    def clear_test_points(self):
+        for student in self.students:
+            student.clear_test_points()
+
     def get_final_exam_by_date_time(self, date_time):
         for final_exam in self.final_exams:
             if final_exam.date_time == date_time:
@@ -76,3 +88,20 @@ class Subject:
 
     def add_home_work_category(self, home_work_category):
         self.home_work_categories.append(home_work_category)
+
+    def get_student_by_email(self, moodle_email):
+        for student in self.students:
+            if student.moodle_email == moodle_email:
+                return student
+
+    def clear_final_exam_points(self):
+        for student in self.students:
+            student.clear_final_exam_points()
+
+    def clear_home_work_points(self):
+        for student in self.students:
+            student.clear_home_work_points()
+
+    def clear_test_points(self):
+        for student in self.students:
+            student.clear_test_points()

@@ -1,3 +1,8 @@
+from .grade import StudentGrade
+from .homeworkpoints import HomeWorkPoints
+from .testpoints import TestPoints
+
+
 class Student:
     def __init__(self, number, name, surname, group):
         self.number = number
@@ -8,6 +13,8 @@ class Student:
         self.moodle_id = None
         self.moodle_group = None
         self.moodle_email = None
+        self.home_work_points = []
+        self.test_points = []
 
     def __str__(self):
         graded = ""
@@ -24,5 +31,31 @@ class Student:
     def add_grade(self, grade):
         self.grades.append(grade)
 
+    def add_test_points(self, test, points):
+        self.test_points.append(TestPoints(test, points))
+
+    def add_home_work_points(self, home_work, points):
+        self.home_work_points.append(HomeWorkPoints(home_work, points))
+
+    def add_final_exam_points(self, final_exam, points):
+        for grade in self.grades:
+            if grade.final_exam == final_exam:
+                grade.points = points
+                break
+        else:
+            grade = StudentGrade(final_exam, None)
+            grade.points = points
+            self.grades.append(grade)
+
     def clear_grades(self):
-        pass
+        self.grades.clear()
+
+    def clear_final_exam_points(self):
+        for grade in self.grades:
+            grade.points = None
+
+    def clear_home_work_points(self):
+        self.home_work_points.clear()
+
+    def clear_test_points(self):
+        self.test_points.clear()

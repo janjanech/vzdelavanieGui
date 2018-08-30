@@ -14,6 +14,7 @@ class StudentGrade:
     def __init__(self, final_exam, grade):
         self.final_exam = final_exam
         self.grade = grade
+        self.points = None
 
     def __str__(self):
         return "<Grade {0} for final exam at {1}>".format(self.grade.name, self.final_exam.date_time.isoformat())

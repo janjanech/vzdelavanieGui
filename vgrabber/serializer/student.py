@@ -29,11 +29,34 @@ class StudentSerializer:
             **optional_info
         )
 
+        for home_work_point in self.__student.home_work_points:
+            homework_element = Element(
+                'homework',
+                id=str(home_work_point.home_work.id),
+                points=str(home_work_point.points)
+            )
+            student_element.append(homework_element)
+
+        for test_point in self.__student.test_points:
+            test_element = Element(
+                'test',
+                id=str(test_point.test.id),
+                points=str(test_point.points)
+            )
+            student_element.append(test_element)
+
         for grade in self.__student.grades:
+            optional_info = {}
+
+            if grade.grade is not None:
+                optional_info['grade'] = grade.grade.name
+            if grade.points is not None:
+                optional_info['points'] = str(grade.points)
+
             finalexam_element = Element(
                 'finalexam',
                 id=str(grade.final_exam.id),
-                grade=grade.grade.name
+                **optional_info
             )
             student_element.append(finalexam_element)
 
