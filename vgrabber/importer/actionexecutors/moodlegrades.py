@@ -68,7 +68,10 @@ class MoodleGradesActionExecutor(ActionExecutor):
                 if grade == '-' or not grade:
                     grades.append(0)
                 else:
-                    grades.append(float(grade))
+                    try:
+                        grades.append(float(grade))
+                    except:
+                        grades.append(0)
 
             if not any(grades):
                 continue
