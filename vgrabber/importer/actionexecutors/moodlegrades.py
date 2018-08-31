@@ -6,7 +6,7 @@ from itertools import islice
 from seleniumrequests import Chrome
 
 from ..importaction import ImportAction
-from vgrabber.model import Subject, Test, HomeWork, FinalExam
+from vgrabber.model import Subject, Test, HomeWork, FinalExam, Student
 from .actionexecutor import ActionExecutor
 
 
@@ -81,7 +81,9 @@ class MoodleGradesActionExecutor(ActionExecutor):
                     logging.WARN,
                     "Student {0} {1} with email {2} not found".format(row[0], row[1], student_email)
                 )
-                continue
+                student = Student(None, row[0], row[1], None)
+                student.moodle_email = student_email
+                model.add_student(student)
 
             for grade_item, grade in zip(self.__state.grade_items, grades):
                 if grade_item is None or grade == 0:
