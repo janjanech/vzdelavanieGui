@@ -4,7 +4,7 @@ from urllib.parse import urlparse, parse_qs
 
 from seleniumrequests import Chrome
 
-from ..importaction import ImportAction
+from vgrabber.base.importaction import ImportAction
 from vgrabber.model import Subject, Test, HomeWork
 from vgrabber.utilities.accents import strip_accents
 from .actionexecutor import ActionExecutor

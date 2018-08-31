@@ -1,4 +1,5 @@
 import os.path
+from typing import List
 
 from vgrabber.utilities.accents import strip_accents
 from .grade import StudentGrade
@@ -7,6 +8,17 @@ from .testpoints import TestPoints
 
 
 class Student:
+    number: str
+    name: str
+    surname: str
+    group: str
+    grades: List[StudentGrade]
+    moodle_id: int
+    moodle_group: str
+    moodle_email: str
+    home_work_points: List[HomeWorkPoints]
+    test_points: List[TestPoints]
+    
     def __init__(self, number, name, surname, group):
         self.number = number
         self.name = name

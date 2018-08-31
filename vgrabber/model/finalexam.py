@@ -1,4 +1,12 @@
+import datetime
+
+
 class FinalExam:
+    date_time: datetime.datetime
+    room: str
+    id: int
+    moodle_id: int
+
     def __init__(self, date_time, room, id):
         self.date_time = date_time
         self.room = room

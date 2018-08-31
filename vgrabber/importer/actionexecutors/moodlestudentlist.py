@@ -5,7 +5,7 @@ from seleniumrequests import Chrome
 
 from vgrabber.utilities.accents import strip_accents
 from .actionexecutor import ActionExecutor
-from ..importaction import ImportAction
+from vgrabber.base.importaction import ImportAction
 from vgrabber.model import Subject, Student, Teacher
 
 

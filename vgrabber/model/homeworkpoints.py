@@ -1,9 +1,14 @@
 import os.path
 
 from .files import FileList
+from .homework import HomeWork
 
 
 class HomeWorkPoints:
+    home_work: HomeWork
+    points: float
+    files: FileList
+
     def __init__(self, home_work, points):
         self.home_work = home_work
         self.points = points

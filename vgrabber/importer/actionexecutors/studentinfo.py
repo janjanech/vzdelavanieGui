@@ -2,7 +2,7 @@ import datetime
 
 from seleniumrequests import Chrome
 
-from ..importaction import ImportAction
+from vgrabber.base.importaction import ImportAction
 from vgrabber.model import Subject, Student, Grade, StudentGrade
 from .actionexecutor import ActionExecutor
 

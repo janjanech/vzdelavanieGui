@@ -1,7 +1,24 @@
+from typing import Set, List
+
+from vgrabber.base.importaction import ImportAction
+from .student import Student
+from .teacher import Teacher
 from .homework import HomeWorkCategory
+from .test import Test
+from .finalexam import FinalExam
 
 
 class Subject:
+    number: str
+    name: str
+    year: str
+    progress: Set[ImportAction]
+    students: List[Student]
+    teachers: List[Teacher]
+    home_work_categories: List[HomeWorkCategory]
+    tests: List[Test]
+    final_exams: List[FinalExam]
+
     def __init__(self, number, name, year):
         self.number = number
         self.name = name

@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from seleniumrequests import Chrome
 
 from vgrabber.model.files import InMemoryFile
-from ..importaction import ImportAction
+from vgrabber.base.importaction import ImportAction
 from vgrabber.model import Subject
 from .actionexecutor import ActionExecutor
 

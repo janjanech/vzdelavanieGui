@@ -5,7 +5,7 @@ from itertools import islice
 
 from seleniumrequests import Chrome
 
-from ..importaction import ImportAction
+from vgrabber.base.importaction import ImportAction
 from vgrabber.model import Subject, Test, HomeWork, FinalExam, Student
 from .actionexecutor import ActionExecutor
 

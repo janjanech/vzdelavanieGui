@@ -2,6 +2,7 @@ import os.path
 from enum import Enum, auto
 
 from .files import FileList
+from .finalexam import FinalExam
 
 
 class Grade(Enum):
@@ -14,6 +15,11 @@ class Grade(Enum):
 
 
 class StudentGrade:
+    final_exam: FinalExam
+    grade: Grade
+    points: float
+    files: FileList
+
     def __init__(self, final_exam, grade):
         self.final_exam = final_exam
         self.grade = grade

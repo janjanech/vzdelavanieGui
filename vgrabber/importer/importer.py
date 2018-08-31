@@ -1,7 +1,7 @@
 from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor, \
     StudentInfoActionExecutor, MoodleStudentListActionExecutor, SwitchToMoodleActionExecutor, \
     MoodleGradingItemActionExecutor, MoodleGradesActionExecutor, FileDownloaderActionExecutor
-from .importaction import ImportAction
+from vgrabber.base.importaction import ImportAction
 from .state import ImporterState
 
 

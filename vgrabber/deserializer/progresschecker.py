@@ -1,4 +1,4 @@
-from vgrabber.importer import ImportAction
+from vgrabber.base.importaction import ImportAction
 
 
 class ProgressChecker:

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QDialogButtonBox, QCheckBox
 
-from vgrabber.importer import ImportAction
+from vgrabber.base.importaction import ImportAction
 
 
 class ImportSelectorDialog:

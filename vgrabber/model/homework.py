@@ -1,3 +1,6 @@
+from typing import List
+
+
 class HomeWork:
     def __init__(self, id, name, moodle_id):
         self.id = id
@@ -6,6 +9,9 @@ class HomeWork:
 
 
 class HomeWorkCategory:
+    name: str
+    home_works: List[HomeWork]
+
     def __init__(self, name):
         self.name = name
         self.home_works = []
