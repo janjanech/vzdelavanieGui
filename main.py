@@ -16,7 +16,7 @@ app = QApplication(sys.argv)
 
 try:
     with open('test/subjectinfo.xml', 'rb') as xf:
-        model = SubjectDeserializer(parse(xf).getroot()).deserialize()
+        model = SubjectDeserializer(parse(xf).getroot(), 'test').deserialize()
 except:
     print_exc()
     model = None

@@ -29,6 +29,9 @@ class StudentGrade:
     def __str__(self):
         return "<Grade {0} for final exam at {1}>".format(self.grade.name, self.final_exam.date_time.isoformat())
 
+    def clear_files(self):
+        self.files.clear()
+
     def save(self, directory):
         self.files.save(
             os.path.join(

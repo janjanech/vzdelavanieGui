@@ -8,8 +8,9 @@ from vgrabber.model import Subject
 
 
 class SubjectDeserializer:
-    def __init__(self, subject_element):
+    def __init__(self, subject_element, path):
         self.__subject_element = subject_element
+        self.__path = path
 
     def deserialize(self):
         subject = Subject(
@@ -43,7 +44,8 @@ class SubjectDeserializer:
                 subject.tests,
                 home_works,
                 subject.final_exams,
-                student_element
+                student_element,
+                self.__path
             ).deserialize()
             subject.add_student(student)
 

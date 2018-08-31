@@ -14,6 +14,9 @@ class HomeWorkPoints:
         self.points = points
         self.files = FileList()
 
+    def clear_files(self):
+        self.files.clear()
+
     def save(self, directory):
         self.files.save(
             os.path.join(

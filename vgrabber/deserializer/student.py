@@ -1,12 +1,16 @@
+import os.path
+
 from vgrabber.model import Student, StudentGrade, Grade
+from vgrabber.model.files import StoredFile
 
 
 class StudentDeserializer:
-    def __init__(self, tests, home_works, final_exams, student_element):
+    def __init__(self, tests, home_works, final_exams, student_element, path):
         self.__tests = {test.id: test for test in tests}
         self.__home_works = {home_work.id: home_work for home_work in home_works}
         self.__final_exams = {final_exam.id: final_exam for final_exam in final_exams}
         self.__student_element = student_element
+        self.__path = path
 
     def deserialize(self):
         student = Student(
@@ -29,7 +33,12 @@ class StudentDeserializer:
 
         for homework_element in self.__student_element.xpath('.//homework'):
             home_work = self.__home_works[int(homework_element.attrib['id'])]
-            student.add_home_work_points(home_work, float(homework_element.attrib['points']))
+
+            if 'points' in homework_element.attrib:
+                student.add_home_work_points(home_work, float(homework_element.attrib['points']))
+
+            for file in self.__deserialize_files(homework_element):
+                student.add_home_work_file(home_work, file)
 
         for finalexam_element in self.__student_element.xpath('.//finalexam'):
             grade_mark = None
@@ -44,6 +53,16 @@ class StudentDeserializer:
             if 'points' in finalexam_element.attrib:
                 grade.points = float(finalexam_element.attrib['points'])
 
+            for file in self.__deserialize_files(finalexam_element):
+                grade.files.add_file(file)
+
             student.add_grade(grade)
 
         return student
+
+    def __deserialize_files(self, parent_element):
+        for file_element in parent_element.xpath('./file'):
+            yield StoredFile(
+                file_element.attrib['filename'],
+                os.path.join(self.__path, file_element.attrib['path'])
+            )

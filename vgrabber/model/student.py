@@ -18,7 +18,7 @@ class Student:
     moodle_email: str
     home_work_points: List[HomeWorkPoints]
     test_points: List[TestPoints]
-    
+
     def __init__(self, number, name, surname, group):
         self.number = number
         self.name = name
@@ -72,6 +72,16 @@ class Student:
             grade.files.add_file(file)
             self.grades.append(grade)
 
+    def add_home_work_file(self, home_work, file):
+        for home_work_points in self.home_work_points:
+            if home_work_points.home_work == home_work:
+                home_work_points.files.add_file(file)
+                break
+        else:
+            home_work_points = HomeWorkPoints(home_work, None)
+            home_work_points.files.add_file(file)
+            self.home_work_points.append(home_work_points)
+
     def clear_grades(self):
         self.grades.clear()
 
@@ -79,21 +89,27 @@ class Student:
         for grade in self.grades:
             grade.points = None
 
-    def clear_final_exam_files(self):
-        for grade in self.grades:
-            grade.files.clear()
-
     def clear_home_work_points(self):
         self.home_work_points.clear()
 
     def clear_test_points(self):
         self.test_points.clear()
 
-    def save(self, directory):
+    def clear_final_exam_files(self):
         for grade in self.grades:
-            grade.save(
-                os.path.join(
-                    directory,
-                    '{0}_{1}{2}'.format(self.number, strip_accents(self.surname), strip_accents(self.name))
-                )
-            )
+            grade.clear_files()
+
+    def clear_home_work_files(self):
+        for home_work_points in self.home_work_points:
+            home_work_points.clear_files()
+
+    def save(self, directory):
+        student_dir = os.path.join(
+            directory,
+            '{0}_{1}{2}'.format(self.number, strip_accents(self.surname), strip_accents(self.name))
+        )
+        for grade in self.grades:
+            grade.save(student_dir)
+
+        for home_work_point in self.home_work_points:
+            home_work_point.save(student_dir)

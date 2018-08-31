@@ -33,11 +33,18 @@ class StudentSerializer:
         )
 
         for home_work_point in self.__student.home_work_points:
+            optional_info = {}
+            if home_work_point.points is not None:
+                optional_info['points'] = str(home_work_point.points)
+
             homework_element = Element(
                 'homework',
                 id=str(home_work_point.home_work.id),
-                points=str(home_work_point.points)
+                **optional_info
             )
+
+            self.__serialize_files(homework_element, home_work_point.files)
+
             student_element.append(homework_element)
 
         for test_point in self.__student.test_points:
@@ -62,15 +69,18 @@ class StudentSerializer:
                 **optional_info
             )
 
-            for file in grade.files:
-                file_element = Element(
-                    'file',
-                    path=relpath(file.file_path, self.__path),
-                    filename=file.file_name
-                )
-
-                finalexam_element.append(file_element)
+            self.__serialize_files(finalexam_element, grade.files)
 
             student_element.append(finalexam_element)
 
         return student_element
+
+    def __serialize_files(self, parent_element, files):
+        for file in files:
+            file_element = Element(
+                'file',
+                path=relpath(file.file_path, self.__path),
+                filename=file.file_name
+            )
+
+            parent_element.append(file_element)
