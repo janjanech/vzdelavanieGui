@@ -37,6 +37,7 @@ class FileDownloaderActionExecutor(ActionExecutor):
         model: Subject = self.__state.model
 
         if self.__import_final_exams:
+            model.clear_final_exam_files()
             for final_exam in model.final_exams:
                 for student, assignment_file in self.__download_assignment_files(final_exam.moodle_id):
                     student.add_final_exam_file(final_exam, assignment_file)

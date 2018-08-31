@@ -62,6 +62,10 @@ class Subject:
         for student in self.students:
             student.clear_final_exam_points()
 
+    def clear_final_exam_files(self):
+        for student in self.students:
+            student.clear_final_exam_files()
+
     def clear_home_work_points(self):
         for student in self.students:
             student.clear_home_work_points()

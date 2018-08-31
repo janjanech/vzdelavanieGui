@@ -67,6 +67,10 @@ class Student:
         for grade in self.grades:
             grade.points = None
 
+    def clear_final_exam_files(self):
+        for grade in self.grades:
+            grade.files.clear()
+
     def clear_home_work_points(self):
         self.home_work_points.clear()
 

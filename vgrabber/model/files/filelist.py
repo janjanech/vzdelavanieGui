@@ -8,6 +8,9 @@ class FileList:
     def __iter__(self):
         return iter(self.files)
 
+    def clear(self):
+        self.files.clear()
+
     def add_file(self, file):
         self.files.append(file)
 
