@@ -82,6 +82,16 @@ class Student:
             home_work_points.files.add_file(file)
             self.home_work_points.append(home_work_points)
 
+    def add_test_file(self, test, file):
+        for test_points in self.test_points:
+            if test_points.test == test:
+                test_points.files.add_file(file)
+                break
+        else:
+            test_points = TestPoints(test, None)
+            test_points.files.add_file(file)
+            self.test_points.append(test_points)
+
     def clear_grades(self):
         self.grades.clear()
 
@@ -103,6 +113,10 @@ class Student:
         for home_work_points in self.home_work_points:
             home_work_points.clear_files()
 
+    def clear_test_files(self):
+        for test_points in self.test_points:
+            test_points.clear_files()
+
     def save(self, directory):
         student_dir = os.path.join(
             directory,
@@ -113,3 +127,6 @@ class Student:
 
         for home_work_point in self.home_work_points:
             home_work_point.save(student_dir)
+
+        for test_points in self.test_points:
+            test_points.save(student_dir)

@@ -1,6 +1,7 @@
 from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, FinalExamActionExecutor, \
     StudentInfoActionExecutor, MoodleStudentListActionExecutor, SwitchToMoodleActionExecutor, \
-    MoodleGradingItemActionExecutor, MoodleGradesActionExecutor, FileDownloaderActionExecutor
+    MoodleGradingItemActionExecutor, MoodleGradesActionExecutor, FileDownloaderActionExecutor, \
+    TestDownloaderActionExecutor
 from vgrabber.base.importaction import ImportAction
 from .state import ImporterState
 
@@ -29,12 +30,10 @@ class Importer:
             MoodleGradesActionExecutor
         ),
         (
-            {
-                ImportAction.moodle_home_work_details, ImportAction.moodle_test_details,
-                ImportAction.moodle_final_exam_details
-            },
+            {ImportAction.moodle_home_work_details, ImportAction.moodle_final_exam_details},
             FileDownloaderActionExecutor
         ),
+        ({ImportAction.moodle_test_details}, TestDownloaderActionExecutor)
     )
 
     def __init__(self, login, password, actions, ui_callbacks, model=None):

@@ -53,6 +53,9 @@ class StudentSerializer:
                 id=str(test_point.test.id),
                 points=str(test_point.points)
             )
+
+            self.__serialize_files(test_element, test_point.files)
+
             student_element.append(test_element)
 
         for grade in self.__student.grades:

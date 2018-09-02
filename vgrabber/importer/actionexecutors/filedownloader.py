@@ -28,7 +28,6 @@ class FileDownloaderActionExecutor(ActionExecutor):
 
         self.__import_final_exams = bool(self.__state.requested_actions & {ImportAction.moodle_final_exam_details})
         self.__import_home_works = bool(self.__state.requested_actions & {ImportAction.moodle_home_work_details})
-        self.__import_tests = bool(self.__state.requested_actions & {ImportAction.moodle_test_details})
 
     def exec(self):
         browser: Chrome = self.__state.browser

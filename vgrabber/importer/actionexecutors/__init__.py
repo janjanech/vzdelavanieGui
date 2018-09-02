@@ -7,3 +7,4 @@ from .moodlestudentlist import MoodleStudentListActionExecutor
 from .moodlegradingitem import MoodleGradingItemActionExecutor
 from .moodlegrades import MoodleGradesActionExecutor
 from .filedownloader import FileDownloaderActionExecutor
+from .testdownloader import TestDownloaderActionExecutor

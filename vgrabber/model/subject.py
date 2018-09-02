@@ -98,6 +98,10 @@ class Subject:
         for student in self.students:
             student.clear_home_work_files()
 
+    def clear_test_files(self):
+        for student in self.students:
+            student.clear_test_files()
+
     def get_final_exam_by_date_time(self, date_time):
         for final_exam in self.final_exams:
             if final_exam.date_time == date_time:
