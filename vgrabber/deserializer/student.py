@@ -29,7 +29,12 @@ class StudentDeserializer:
 
         for test_element in self.__student_element.xpath('.//test'):
             test = self.__tests[int(test_element.attrib['id'])]
-            student.add_test_points(test, float(test_element.attrib['points']))
+
+            if 'points' in test_element.attrib:
+                student.add_test_points(test, float(test_element.attrib['points']))
+
+            for file in self.__deserialize_files(test_element):
+                student.add_test_file(test, file)
 
         for homework_element in self.__student_element.xpath('.//homework'):
             home_work = self.__home_works[int(homework_element.attrib['id'])]
