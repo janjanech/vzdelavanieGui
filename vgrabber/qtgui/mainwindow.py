@@ -22,6 +22,7 @@ except:
 class MainWindow:
     def __init__(self):
         self.model = GuiModel()
+        self.__tabs = []  # keeps references to tab instances
 
         self.__window = QMainWindow()
         self.__set_title()
@@ -55,13 +56,18 @@ class MainWindow:
         self.__window.setMenuBar(menu_bar)
 
     def __build_tabs(self):
+        def add_tab(tab_class, label):
+            tab = tab_class(self.model)
+            self.__tabs.append(tab)
+            tabs.addTab(tab.widget, label)
+
         tabs = QTabWidget()
 
-        tabs.addTab(StudentsTab().widget, "Students")
-        tabs.addTab(TeachersTab().widget, "Teachers")
-        tabs.addTab(HomeWorksTab().widget, "Home works")
-        tabs.addTab(TestsTab().widget, "Tests")
-        tabs.addTab(FinalExamsTab().widget, "Final exams")
+        add_tab(StudentsTab, "Students")
+        add_tab(TeachersTab, "Teachers")
+        add_tab(HomeWorksTab, "Home works")
+        add_tab(TestsTab, "Tests")
+        add_tab(FinalExamsTab, "Final exams")
 
         self.__window.setCentralWidget(tabs)
 
