@@ -154,3 +154,9 @@ class Subject:
     def save(self, directory):
         for student in self.students:
             student.save(directory)
+
+    def get_group_by_moodle_id(self, moodle_group_id):
+        for teacher in self.teachers:
+            for group in teacher.taught_groups:
+                if group.moodle_id == moodle_group_id:
+                    return group
