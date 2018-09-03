@@ -59,9 +59,10 @@ class MainWindow:
         def add_tab(tab_class, label):
             tab = tab_class(self.model)
             self.__tabs.append(tab)
-            tabs.addTab(tab.widget, label)
+            self.__tabWidget.addTab(tab.widget, label)
 
-        tabs = QTabWidget()
+        self.__tabWidget = QTabWidget()
+        self.__tabWidget.setEnabled(False)
 
         add_tab(StudentsTab, "Students")
         add_tab(TeachersTab, "Teachers")
@@ -69,7 +70,7 @@ class MainWindow:
         add_tab(TestsTab, "Tests")
         add_tab(FinalExamsTab, "Final exams")
 
-        self.__window.setCentralWidget(tabs)
+        self.__window.setCentralWidget(self.__tabWidget)
 
     def __subject_changed(self):
         self.__set_title()
@@ -78,6 +79,7 @@ class MainWindow:
         self.__save_action.setEnabled(has_model and self.model.saved_as is not None)
         self.__save_as_action.setEnabled(has_model and self.model.saved_as is None)
         self.__close_action.setEnabled(has_model)
+        self.__tabWidget.setEnabled(has_model)
 
     def __set_title(self):
         if self.model.subject is None:
