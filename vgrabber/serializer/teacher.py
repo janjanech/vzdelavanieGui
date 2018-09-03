@@ -29,10 +29,13 @@ class TeacherSerializer:
             if group.number is not None:
                 optional_info['number'] = group.number
 
+            if group.moodle_name is not None:
+                optional_info['moodlename'] = group.moodle_name
+            if group.moodle_id is not None:
+                optional_info['moodleid'] = str(group.moodle_id)
+
             group_element = Element(
                 'group',
-                moodlename = group.moodle_name,
-                moodleid = str(group.moodle_id),
                 **optional_info
             )
 

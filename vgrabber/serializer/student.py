@@ -48,10 +48,14 @@ class StudentSerializer:
             student_element.append(homework_element)
 
         for test_point in self.__student.test_points:
+            optional_info = {}
+            if test_point.points is not None:
+                optional_info['points'] = str(test_point.points)
+
             test_element = Element(
                 'test',
                 id=str(test_point.test.id),
-                points=str(test_point.points)
+                **optional_info
             )
 
             self.__serialize_files(test_element, test_point.files)

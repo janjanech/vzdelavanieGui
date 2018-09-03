@@ -17,10 +17,14 @@ class TeacherDeserializer:
             teacher = Teacher(None, None, None, None)
 
         for group_element in self.__teacher_element.xpath('./group'):
+            moodleid = None
+            if 'moodleid' in group_element.attrib:
+                moodleid = int(group_element.attrib['moodleid'])
+
             group = Group(
                 group_element.attrib.get('number'),
-                int(group_element.attrib['moodleid']),
-                group_element.attrib['moodlename']
+                moodleid,
+                group_element.attrib.get('moodlename')
             )
             teacher.add_taught_group(group)
 
