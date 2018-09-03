@@ -1,4 +1,4 @@
-from vgrabber.model import Teacher
+from vgrabber.model import Teacher, Group
 
 
 class TeacherDeserializer:
@@ -6,11 +6,22 @@ class TeacherDeserializer:
         self.__teacher_element = teacher_element
 
     def deserialize(self):
-        teacher = Teacher(
-            self.__teacher_element.attrib['name'],
-            self.__teacher_element.attrib['surname'],
-            int(self.__teacher_element.attrib['moodleid']),
-            self.__teacher_element.attrib['moodleemail']
-        )
+        if 'name' in self.__teacher_element.attrib:
+            teacher = Teacher(
+                self.__teacher_element.attrib['name'],
+                self.__teacher_element.attrib['surname'],
+                int(self.__teacher_element.attrib['moodleid']),
+                self.__teacher_element.attrib['moodleemail']
+            )
+        else:
+            teacher = Teacher(None, None, None, None)
+
+        for group_element in self.__teacher_element.xpath('./group'):
+            group = Group(
+                group_element.attrib.get('number'),
+                int(group_element.attrib['moodleid']),
+                group_element.attrib['moodlename']
+            )
+            teacher.add_taught_group(group)
 
         return teacher

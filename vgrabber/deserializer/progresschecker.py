@@ -17,6 +17,7 @@ class ProgressChecker:
         (ImportAction.moodle_final_exam_details, '//student/finalexam/file'),
         (ImportAction.moodle_home_work_details, '//student/homework/file'),
         (ImportAction.moodle_test_details, '//student/test/file'),
+        (ImportAction.moodle_teacher_groups, '//teacher/group'),
     )
 
     def __init__(self, subject_element):

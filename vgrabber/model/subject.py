@@ -1,6 +1,7 @@
 from typing import Set, List
 
 from vgrabber.base.importaction import ImportAction
+from vgrabber.utilities.accents import strip_accents
 from .student import Student
 from .teacher import Teacher
 from .homework import HomeWorkCategory
@@ -74,6 +75,10 @@ class Subject:
     def clear_tests(self):
         self.tests.clear()
 
+    def clear_teacher_groups(self):
+        for teacher in self.teachers:
+            teacher.clear_groups()
+
     def clear_home_works(self):
         for category in self.home_work_categories:
             category.clear_home_works()
@@ -127,6 +132,24 @@ class Subject:
         for student in self.students:
             if student.moodle_id == moodle_id:
                 return student
+
+    def get_teacher_by_surname(self, teacher_surname):
+        teacher_surname = strip_accents(teacher_surname)
+
+        for teacher in self.teachers:
+            if teacher.surname and strip_accents(teacher.surname) == teacher_surname:
+                return teacher
+        else:
+            return self.get_unknown_teacher()
+
+    def get_unknown_teacher(self):
+        for teacher in self.teachers:
+            if teacher.surname is None:
+                return teacher
+        else:
+            teacher = Teacher(None, None, None, None)
+            self.teachers.append(teacher)
+            return teacher
 
     def save(self, directory):
         for student in self.students:
