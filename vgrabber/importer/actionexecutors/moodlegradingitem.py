@@ -4,6 +4,7 @@ from urllib.parse import urlparse, parse_qs
 
 from seleniumrequests import Chrome
 
+from vgrabber.base.constants import FINAL_EXAM_IDENTIFIER
 from vgrabber.base.importaction import ImportAction
 from vgrabber.model import Subject, Test, HomeWork
 from vgrabber.utilities.accents import strip_accents
@@ -45,7 +46,7 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
                     grade_items.append(self.__get_test(item_name, item_id))
                 elif '/assign/' in href.path:
                     item_id = int(href_query["id"][0])
-                    if 'skuska' in strip_accents(item_name).lower():
+                    if FINAL_EXAM_IDENTIFIER in strip_accents(item_name).lower():
                         grade_items.append(self.__get_final_exam(item_name, item_id))
                     else:
                         grade_items.append(self.__get_home_work(item_name, item_id))
