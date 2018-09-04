@@ -6,13 +6,14 @@ from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFi
 from lxml.etree import parse, xmlfile
 
 from vgrabber.deserializer import SubjectDeserializer
-from vgrabber.qtgui.importing import LoginDialog, ImportSelectorDialog, QtCallbacks
 from vgrabber.serializer import SubjectSerializer
 from .guimodel import GuiModel
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
 
 try:
     from vgrabber.importer import Importer
+    from vgrabber.qtgui.importing import LoginDialog, ImportSelectorDialog, QtCallbacks
+
     ALLOW_IMPORT = True
 except:
     print_exc()
