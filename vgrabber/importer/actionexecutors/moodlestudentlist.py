@@ -66,7 +66,7 @@ class MoodleStudentListActionExecutor(ActionExecutor):
                         logging.log(logging.WARN, "Student {0} not found in the student list".format(student))
 
                     student.moodle_id = moodle_id
-                    student.moodle_group = moodle_group
+                    student.moodle_group_id = moodle_group
                     student.moodle_email = email
 
                 if not any(browser.find_elements_by_link_text("Ďalší")):

@@ -8,3 +8,9 @@ class Test:
         self.id = id
         self.name = name
         self.moodle_id = moodle_id
+
+    def get_submissions(self):
+        for student in self.__subject.students:
+            for test_points in student.test_points:
+                if test_points.test is self:
+                    yield test_points

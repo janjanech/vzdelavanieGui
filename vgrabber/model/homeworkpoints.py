@@ -9,11 +9,13 @@ class HomeWorkPoints:
     points: float
     files: FileList
 
-    def __init__(self, subject, home_work, points):
+    def __init__(self, subject, student, home_work, points):
         self.__subject = subject
         self.home_work = home_work
         self.points = points
         self.files = FileList()
+
+        self.student = student
 
     def clear_files(self):
         self.files.clear()

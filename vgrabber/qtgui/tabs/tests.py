@@ -91,19 +91,17 @@ class TestsTab:
         if home_work_items:
             test: Test = home_work_items[0].test
 
-            for student in self.model.subject.students:
-                for test_points in student.test_points:
-                    if test_points.test is test:
-                        student_item = StudentItem(
-                            [
-                                f"{student.surname} {student.name}",
-                                points_or_none(test_points.points)
-                            ],
-                            student
-                        )
+            for test_points in test.get_submissions():
+                student_item = StudentItem(
+                    [
+                        f"{test_points.student.surname} {test_points.student.name}",
+                        points_or_none(test_points.points)
+                    ],
+                    test_points.student
+                )
 
-                        self.__test_details.addTopLevelItem(student_item)
-                        add_files(test_points.files, student_item)
+                self.__test_details.addTopLevelItem(student_item)
+                add_files(test_points.files, student_item)
 
             self.__test_details.expandAll()
 

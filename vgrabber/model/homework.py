@@ -8,6 +8,12 @@ class HomeWork:
         self.name = name
         self.moodle_id = moodle_id
 
+    def get_submissions(self):
+        for student in self.__subject.students:
+            for home_work_points in student.home_work_points:
+                if home_work_points.home_work is self:
+                    yield home_work_points
+
 
 class HomeWorkCategory:
     name: str

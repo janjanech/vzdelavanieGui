@@ -16,8 +16,8 @@ class StudentSerializer:
         optional_info = {}
         if self.__student.moodle_id is not None:
             optional_info['moodleid'] = str(self.__student.moodle_id)
-        if self.__student.moodle_group is not None:
-            optional_info['moodlegroup'] = str(self.__student.moodle_group)
+        if self.__student.moodle_group_id is not None:
+            optional_info['moodlegroup'] = str(self.__student.moodle_group_id)
         if self.__student.moodle_email is not None:
             optional_info['moodleemail'] = self.__student.moodle_email
         if self.__student.group is not None:

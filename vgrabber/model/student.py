@@ -14,7 +14,7 @@ class Student:
     group: str
     grades: List[StudentGrade]
     moodle_id: int
-    moodle_group: int
+    moodle_group_id: int
     moodle_email: str
     home_work_points: List[HomeWorkPoints]
     test_points: List[TestPoints]
@@ -27,7 +27,7 @@ class Student:
         self.group = group
         self.grades = []
         self.moodle_id = None
-        self.moodle_group = None
+        self.moodle_group_id = None
         self.moodle_email = None
         self.home_work_points = []
         self.test_points = []
@@ -48,10 +48,10 @@ class Student:
         self.grades.append(grade)
 
     def add_test_points(self, test, points):
-        self.test_points.append(TestPoints(self.__subject, test, points))
+        self.test_points.append(TestPoints(self.__subject, self, test, points))
 
     def add_home_work_points(self, home_work, points):
-        self.home_work_points.append(HomeWorkPoints(self, home_work, points))
+        self.home_work_points.append(HomeWorkPoints(self.__subject, self, home_work, points))
 
     def add_final_exam_points(self, final_exam, points):
         for grade in self.grades:
@@ -59,7 +59,7 @@ class Student:
                 grade.points = points
                 break
         else:
-            grade = StudentGrade(self.__subject, final_exam, None)
+            grade = StudentGrade(self.__subject, self, final_exam, None)
             grade.points = points
             self.grades.append(grade)
 
@@ -69,7 +69,7 @@ class Student:
                 grade.files.add_file(file)
                 break
         else:
-            grade = StudentGrade(self.__subject, final_exam, None)
+            grade = StudentGrade(self.__subject, self, final_exam, None)
             grade.files.add_file(file)
             self.grades.append(grade)
 
@@ -79,7 +79,7 @@ class Student:
                 home_work_points.files.add_file(file)
                 break
         else:
-            home_work_points = HomeWorkPoints(self, home_work, None)
+            home_work_points = HomeWorkPoints(self.__subject, self, home_work, None)
             home_work_points.files.add_file(file)
             self.home_work_points.append(home_work_points)
 
@@ -89,7 +89,7 @@ class Student:
                 test_points.files.add_file(file)
                 break
         else:
-            test_points = TestPoints(self.__subject, test, None)
+            test_points = TestPoints(self.__subject, self, test, None)
             test_points.files.add_file(file)
             self.test_points.append(test_points)
 
@@ -117,6 +117,12 @@ class Student:
     def clear_test_files(self):
         for test_points in self.test_points:
             test_points.clear_files()
+
+    def get_moodle_group(self):
+        for teacher in self.__subject.teachers:
+            for group in teacher.taught_groups:
+                if group.moodle_id == self.moodle_group_id:
+                    return group
 
     def save(self, directory):
         student_dir = os.path.join(

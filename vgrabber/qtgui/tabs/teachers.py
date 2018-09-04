@@ -72,18 +72,16 @@ class TeachersTab:
                 self.__teacher_details.addTopLevelItem(group_item)
                 group_item.setFirstColumnSpanned(True)
 
-                if group.moodle_id is not None:
-                    for student in self.model.subject.students:
-                        if student.moodle_group == group.moodle_id:
-                            item = QTreeWidgetItem(
-                                [
-                                    student.number,
-                                    f"{student.surname} {student.name}",
-                                    student.group,
-                                    student.moodle_email
-                                ]
-                            )
+                for student in group.get_students():
+                    item = QTreeWidgetItem(
+                        [
+                            student.number,
+                            f"{student.surname} {student.name}",
+                            student.group,
+                            student.moodle_email
+                        ]
+                    )
 
-                            group_item.addChild(item)
+                    group_item.addChild(item)
 
         self.__teacher_details.expandAll()

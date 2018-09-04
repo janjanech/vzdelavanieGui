@@ -56,7 +56,7 @@ class StudentInfoActionExecutor(ActionExecutor):
                         if participant[idx]:
                             parsed_date = datetime.datetime.strptime(participant[idx], "%d.%m.%Y").date()
                             if parsed_date == final_exam.date_time.date():
-                                student.add_grade(model, StudentGrade(model, final_exam, Grade[participant[idx + 1]]))
+                                student.add_grade(model, StudentGrade(model, student, final_exam, Grade[participant[idx + 1]]))
                                 break
                     else:
-                        student.add_grade(model, StudentGrade(model, final_exam, Grade.FX))
+                        student.add_grade(model, StudentGrade(model, student, final_exam, Grade.FX))

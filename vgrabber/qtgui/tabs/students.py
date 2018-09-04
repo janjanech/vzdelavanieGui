@@ -56,7 +56,7 @@ class StudentsTab:
 
         if self.model.subject is not None:
             for student in self.model.subject.students:
-                moodle_group = self.model.subject.get_group_by_moodle_id(student.moodle_group)
+                moodle_group = student.get_moodle_group()
                 moodle_group_name = ""
                 if moodle_group is not None:
                     moodle_group_name = moodle_group.moodle_name

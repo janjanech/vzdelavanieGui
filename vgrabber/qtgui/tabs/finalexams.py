@@ -91,25 +91,23 @@ class FinalExamsTab:
         if final_exam_items:
             final_exam: FinalExam = final_exam_items[0].final_exam
 
-            for student in self.model.subject.students:
-                for grade in student.grades:
-                    if grade.final_exam is final_exam:
-                        if grade.grade is not None:
-                            grade_name = grade.grade.name
-                        else:
-                            grade_name = "?"
+            for grade in final_exam.get_submissions():
+                if grade.grade is not None:
+                    grade_name = grade.grade.name
+                else:
+                    grade_name = "?"
 
-                        student_item = StudentItem(
-                            [
-                                f"{student.surname} {student.name}",
-                                points_or_none(grade.points),
-                                grade_name
-                            ],
-                            student
-                        )
+                student_item = StudentItem(
+                    [
+                        f"{grade.student.surname} {grade.student.name}",
+                        points_or_none(grade.points),
+                        grade_name
+                    ],
+                    grade.student
+                )
 
-                        self.__final_exam_details.addTopLevelItem(student_item)
-                        add_files(grade.files, student_item)
+                self.__final_exam_details.addTopLevelItem(student_item)
+                add_files(grade.files, student_item)
 
             self.__final_exam_details.expandAll()
 

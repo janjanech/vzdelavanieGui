@@ -97,19 +97,17 @@ class HomeWorksTab:
         if home_work_items and isinstance(home_work_items[0], HomeWorkItem):
             home_work: HomeWork = home_work_items[0].home_work
 
-            for student in self.model.subject.students:
-                for home_work_points in student.home_work_points:
-                    if home_work_points.home_work is home_work:
-                        student_item = StudentItem(
-                            [
-                                f"{student.surname} {student.name}",
-                                points_or_none(home_work_points.points)
-                            ],
-                            student
-                        )
+            for home_work_points in home_work.get_submissions():
+                student_item = StudentItem(
+                    [
+                        f"{home_work_points.student.surname} {home_work_points.student.name}",
+                        points_or_none(home_work_points.points)
+                    ],
+                    home_work_points.student
+                )
 
-                        self.__home_work_details.addTopLevelItem(student_item)
-                        add_files(home_work_points.files, student_item)
+                self.__home_work_details.addTopLevelItem(student_item)
+                add_files(home_work_points.files, student_item)
 
             self.__home_work_details.expandAll()
 

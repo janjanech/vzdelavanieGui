@@ -25,7 +25,7 @@ class StudentDeserializer:
         if 'moodleid' in self.__student_element.attrib:
             student.moodle_id = int(self.__student_element.attrib['moodleid'])
         if 'moodlegroup' in self.__student_element.attrib:
-            student.moodle_group = int(self.__student_element.attrib['moodlegroup'])
+            student.moodle_group_id = int(self.__student_element.attrib['moodlegroup'])
         if 'moodleemail' in self.__student_element.attrib:
             student.moodle_email = self.__student_element.attrib['moodleemail']
 
@@ -54,6 +54,7 @@ class StudentDeserializer:
 
             grade = StudentGrade(
                 self.__subject,
+                student,
                 self.__final_exams[int(finalexam_element.attrib['id'])],
                 grade_mark
             )
