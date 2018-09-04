@@ -172,4 +172,4 @@ class MainWindow:
         return subject
 
     def show(self):
-        self.__window.show()
+        self.__window.showMaximized()
