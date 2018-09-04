@@ -19,7 +19,8 @@ class Student:
     home_work_points: List[HomeWorkPoints]
     test_points: List[TestPoints]
 
-    def __init__(self, number, name, surname, group):
+    def __init__(self, subject, number, name, surname, group):
+        self.__subject = subject
         self.number = number
         self.name = name
         self.surname = surname
@@ -47,10 +48,10 @@ class Student:
         self.grades.append(grade)
 
     def add_test_points(self, test, points):
-        self.test_points.append(TestPoints(test, points))
+        self.test_points.append(TestPoints(self.__subject, test, points))
 
     def add_home_work_points(self, home_work, points):
-        self.home_work_points.append(HomeWorkPoints(home_work, points))
+        self.home_work_points.append(HomeWorkPoints(self, home_work, points))
 
     def add_final_exam_points(self, final_exam, points):
         for grade in self.grades:
@@ -58,7 +59,7 @@ class Student:
                 grade.points = points
                 break
         else:
-            grade = StudentGrade(final_exam, None)
+            grade = StudentGrade(self.__subject, final_exam, None)
             grade.points = points
             self.grades.append(grade)
 
@@ -68,7 +69,7 @@ class Student:
                 grade.files.add_file(file)
                 break
         else:
-            grade = StudentGrade(final_exam, None)
+            grade = StudentGrade(self.__subject, final_exam, None)
             grade.files.add_file(file)
             self.grades.append(grade)
 
@@ -78,7 +79,7 @@ class Student:
                 home_work_points.files.add_file(file)
                 break
         else:
-            home_work_points = HomeWorkPoints(home_work, None)
+            home_work_points = HomeWorkPoints(self, home_work, None)
             home_work_points.files.add_file(file)
             self.home_work_points.append(home_work_points)
 
@@ -88,7 +89,7 @@ class Student:
                 test_points.files.add_file(file)
                 break
         else:
-            test_points = TestPoints(test, None)
+            test_points = TestPoints(self.__subject, test, None)
             test_points.files.add_file(file)
             self.test_points.append(test_points)
 

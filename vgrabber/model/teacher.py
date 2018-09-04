@@ -10,7 +10,8 @@ class Teacher:
     moodle_email: str
     taught_groups: List[Group]
 
-    def __init__(self, name, surname, moodle_id, moodle_email):
+    def __init__(self, subject, name, surname, moodle_id, moodle_email):
+        self.__subject = subject
         self.name = name
         self.surname = surname
         self.moodle_id = moodle_id

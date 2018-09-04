@@ -5,7 +5,8 @@ from vgrabber.model.files import StoredFile
 
 
 class StudentDeserializer:
-    def __init__(self, tests, home_works, final_exams, student_element, path):
+    def __init__(self, subject, tests, home_works, final_exams, student_element, path):
+        self.__subject = subject
         self.__tests = {test.id: test for test in tests}
         self.__home_works = {home_work.id: home_work for home_work in home_works}
         self.__final_exams = {final_exam.id: final_exam for final_exam in final_exams}
@@ -14,6 +15,7 @@ class StudentDeserializer:
 
     def deserialize(self):
         student = Student(
+            self.__subject,
             self.__student_element.attrib.get('number'),
             self.__student_element.attrib['name'],
             self.__student_element.attrib['surname'],
@@ -51,6 +53,7 @@ class StudentDeserializer:
                 grade_mark = Grade[finalexam_element.attrib['grade']]
 
             grade = StudentGrade(
+                self.__subject,
                 self.__final_exams[int(finalexam_element.attrib['id'])],
                 grade_mark
             )

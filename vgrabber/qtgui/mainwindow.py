@@ -126,6 +126,7 @@ class MainWindow:
                     model = SubjectDeserializer(parse(xf).getroot(), dirname(file_name)).deserialize()
                 self.model.use_subject(model, file_name)
             except Exception:
+                print_exc()
                 exc = format_exc()
                 message_box = QMessageBox(self.__window)
                 message_box.setWindowModality(Qt.WindowModal)

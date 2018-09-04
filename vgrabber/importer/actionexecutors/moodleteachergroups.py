@@ -40,6 +40,6 @@ class MoodleTeacherGroupsActionExecutor(ActionExecutor):
                 group_number = None
                 teacher = model.get_unknown_teacher()
 
-            group = Group(group_number, moodle_id, group_name)
+            group = Group(model, group_number, moodle_id, group_name)
             teacher.add_taught_group(group)
 

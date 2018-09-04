@@ -37,4 +37,4 @@ class FinalExamActionExecutor(ActionExecutor):
 
             id = int(base64.b64decode(id_base64).decode('ascii').split('-')[3])
 
-            model.add_final_exam(FinalExam(date_time, room, id))
+            model.add_final_exam(FinalExam(model, date_time, room, id))

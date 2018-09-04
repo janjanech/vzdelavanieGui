@@ -2,7 +2,8 @@ from typing import List
 
 
 class HomeWork:
-    def __init__(self, id, name, moodle_id):
+    def __init__(self, subject, id, name, moodle_id):
+        self.__subject = subject
         self.id = id
         self.name = name
         self.moodle_id = moodle_id
@@ -12,7 +13,8 @@ class HomeWorkCategory:
     name: str
     home_works: List[HomeWork]
 
-    def __init__(self, name):
+    def __init__(self, subject, name):
+        self.__subject = subject
         self.name = name
         self.home_works = []
 

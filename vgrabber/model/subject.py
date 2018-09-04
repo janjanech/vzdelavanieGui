@@ -58,7 +58,7 @@ class Subject:
             if found_category.name == category:
                 break
         else:
-            found_category = HomeWorkCategory(category)
+            found_category = HomeWorkCategory(self, category)
             self.home_work_categories.append(found_category)
 
         found_category.add_home_work(home_work)
@@ -147,7 +147,7 @@ class Subject:
             if teacher.surname is None:
                 return teacher
         else:
-            teacher = Teacher(None, None, None, None)
+            teacher = Teacher(self, None, None, None, None)
             self.teachers.append(teacher)
             return teacher
 

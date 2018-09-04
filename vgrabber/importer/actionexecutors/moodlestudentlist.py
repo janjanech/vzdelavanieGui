@@ -61,7 +61,7 @@ class MoodleStudentListActionExecutor(ActionExecutor):
                             # don't create students if they are not in any group
                             continue
 
-                        student = Student(None, name, surname, None)
+                        student = Student(model, None, name, surname, None)
                         model.add_student(student)
                         logging.log(logging.WARN, "Student {0} not found in the student list".format(student))
 
@@ -90,7 +90,7 @@ class MoodleStudentListActionExecutor(ActionExecutor):
 
                     email = row.find_element_by_css_selector('div.subfield_email').text
 
-                    teacher = Teacher(name, surname, moodle_id, email)
+                    teacher = Teacher(model, name, surname, moodle_id, email)
                     model.add_teacher(teacher)
 
                 if not any(browser.find_elements_by_link_text("Ďalší")):

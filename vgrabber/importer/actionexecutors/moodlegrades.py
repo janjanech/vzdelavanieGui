@@ -81,7 +81,7 @@ class MoodleGradesActionExecutor(ActionExecutor):
                     logging.WARN,
                     "Student {0} {1} with email {2} not found".format(row[0], row[1], student_email)
                 )
-                student = Student(None, row[0], row[1], None)
+                student = Student(model, None, row[0], row[1], None)
                 student.moodle_email = student_email
                 model.add_student(student)
 

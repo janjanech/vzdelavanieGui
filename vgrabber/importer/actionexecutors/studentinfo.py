@@ -32,7 +32,7 @@ class StudentInfoActionExecutor(ActionExecutor):
                 group = row.find_element_by_xpath('.//td[1]').text
                 number = row.find_element_by_xpath('.//td[3]').text
 
-                model.add_student(Student(number, name, surname, group))
+                model.add_student(Student(model, number, name, surname, group))
 
         if import_grades:
             students = {student.number: student for student in model.students}
@@ -56,7 +56,7 @@ class StudentInfoActionExecutor(ActionExecutor):
                         if participant[idx]:
                             parsed_date = datetime.datetime.strptime(participant[idx], "%d.%m.%Y").date()
                             if parsed_date == final_exam.date_time.date():
-                                student.add_grade(StudentGrade(final_exam, Grade[participant[idx + 1]]))
+                                student.add_grade(model, StudentGrade(model, final_exam, Grade[participant[idx + 1]]))
                                 break
                     else:
-                        student.add_grade(StudentGrade(final_exam, Grade.FX))
+                        student.add_grade(model, StudentGrade(model, final_exam, Grade.FX))

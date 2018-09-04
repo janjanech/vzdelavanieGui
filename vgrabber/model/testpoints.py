@@ -9,7 +9,8 @@ class TestPoints:
     points: float
     files: FileList
 
-    def __init__(self, test, points):
+    def __init__(self, subject, test, points):
+        self.__subject = subject
         self.test = test
         self.points = points
         self.files = FileList()

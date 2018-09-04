@@ -20,7 +20,8 @@ class StudentGrade:
     points: float
     files: FileList
 
-    def __init__(self, final_exam, grade):
+    def __init__(self, subject, final_exam, grade):
+        self.__subject = subject
         self.final_exam = final_exam
         self.grade = grade
         self.points = None

@@ -93,7 +93,7 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
         model: Subject = self.__state.model
 
         if self.__import_tests:
-            test = Test(item_id, item_name, item_id)
+            test = Test(model, item_id, item_name, item_id)
             model.add_test(test)
             return test
         else:
@@ -103,7 +103,7 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
         model: Subject = self.__state.model
 
         if self.__import_home_works:
-            home_work = HomeWork(item_id, item_name, item_id)
+            home_work = HomeWork(model, item_id, item_name, item_id)
             model.add_home_work_to_category(home_work)
             return home_work
         else:

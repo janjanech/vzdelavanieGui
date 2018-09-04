@@ -7,7 +7,8 @@ class FinalExam:
     id: int
     moodle_id: int
 
-    def __init__(self, date_time, room, id):
+    def __init__(self, subject, date_time, room, id):
+        self.__subject = subject
         self.date_time = date_time
         self.room = room
         self.id = id

@@ -4,7 +4,8 @@ from vgrabber.model import FinalExam
 
 
 class FinalExamDeserializer:
-    def __init__(self, finalexam_element):
+    def __init__(self, subject, finalexam_element):
+        self.__subject = subject
         self.__finalexam_element = finalexam_element
 
     def deserialize(self):
@@ -17,7 +18,7 @@ class FinalExamDeserializer:
 
         room = self.__finalexam_element.attrib['room']
 
-        final_exam = FinalExam(date_time, room, id)
+        final_exam = FinalExam(self.__subject, date_time, room, id)
 
         if 'moodleid' in self.__finalexam_element.attrib:
             final_exam.moodle_id = self.__finalexam_element.attrib['moodleid']
