@@ -1,30 +1,11 @@
-from PyQt5.QtCore import Qt, QFileInfo, QUrl
-from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QFileIconProvider
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QTreeWidget, QSplitter
 
 from vgrabber.model import FinalExam
-from vgrabber.model.files import StoredFile
-from vgrabber.qtgui.guimodel import GuiModel
-
-
-class FinalExamItem(QTreeWidgetItem):
-    def __init__(self, data, final_exam):
-        super().__init__(data)
-        self.final_exam = final_exam
-
-
-class StudentItem(QTreeWidgetItem):
-    def __init__(self, data, student):
-        super().__init__(data)
-        self.student = student
-
-
-class FileItem(QTreeWidgetItem):
-    file: StoredFile
-
-    def __init__(self, data, file):
-        super().__init__(data)
-        self.file = file
+from .helpers.childfileitems import add_file_items, file_double_clicked
+from .helpers.stringify import points_or_none, grade_or_none
+from ..guimodel import GuiModel
+from .items import FinalExamItem, StudentItem
 
 
 class FinalExamsTab:
@@ -38,7 +19,7 @@ class FinalExamsTab:
         self.__final_exam_details = QTreeWidget()
         self.__final_exam_details.setColumnCount(3)
         self.__final_exam_details.setHeaderLabels(["Student", "Points", "Grade"])
-        self.__final_exam_details.itemDoubleClicked.connect(self.__detail_double_clicked)
+        self.__final_exam_details.itemDoubleClicked.connect(file_double_clicked)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__final_exam_list)
@@ -67,24 +48,6 @@ class FinalExamsTab:
                 self.__final_exam_list.addTopLevelItem(final_exam_item)
 
     def __final_exam_selected(self):
-        fip = QFileIconProvider()
-
-        def points_or_none(points):
-            if points is None:
-                return "?"
-            else:
-                return str(points)
-
-        def add_files(files, item: QTreeWidgetItem):
-            for file in files:
-                if isinstance(file, StoredFile):
-                    file_item = FileItem([file.file_name], file)
-                else:
-                    file_item = QTreeWidgetItem([file.file_name])
-                file_item.setIcon(0, fip.icon(QFileInfo(file.file_name)))
-                item.addChild(file_item)
-                file_item.setFirstColumnSpanned(True)
-
         self.__final_exam_details.clear()
 
         final_exam_items = self.__final_exam_list.selectedItems()
@@ -92,25 +55,16 @@ class FinalExamsTab:
             final_exam: FinalExam = final_exam_items[0].final_exam
 
             for grade in final_exam.get_submissions():
-                if grade.grade is not None:
-                    grade_name = grade.grade.name
-                else:
-                    grade_name = "?"
-
                 student_item = StudentItem(
                     [
                         f"{grade.student.surname} {grade.student.name}",
                         points_or_none(grade.points),
-                        grade_name
+                        grade_or_none(grade.grade)
                     ],
                     grade.student
                 )
 
                 self.__final_exam_details.addTopLevelItem(student_item)
-                add_files(grade.files, student_item)
+                add_file_items(grade.files, student_item)
 
             self.__final_exam_details.expandAll()
-
-    def __detail_double_clicked(self, item, column):
-        if isinstance(item, FileItem):
-            QDesktopServices.openUrl(QUrl.fromLocalFile(item.file.file_path))

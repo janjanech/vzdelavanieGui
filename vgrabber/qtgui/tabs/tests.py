@@ -1,30 +1,11 @@
-from PyQt5.QtCore import Qt, QFileInfo, QUrl
-from PyQt5.QtGui import QDesktopServices
-from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QFileIconProvider
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QTreeWidget, QSplitter
 
 from vgrabber.model import Test
-from vgrabber.model.files import StoredFile
-from vgrabber.qtgui.guimodel import GuiModel
-
-
-class TestItem(QTreeWidgetItem):
-    def __init__(self, data, test):
-        super().__init__(data)
-        self.test = test
-
-
-class StudentItem(QTreeWidgetItem):
-    def __init__(self, data, student):
-        super().__init__(data)
-        self.student = student
-
-
-class FileItem(QTreeWidgetItem):
-    file: StoredFile
-
-    def __init__(self, data, file):
-        super().__init__(data)
-        self.file = file
+from ..guimodel import GuiModel
+from .helpers.childfileitems import add_file_items, file_double_clicked
+from .helpers.stringify import points_or_none
+from .items import StudentItem, TestItem
 
 
 class TestsTab:
@@ -38,7 +19,7 @@ class TestsTab:
         self.__test_details = QTreeWidget()
         self.__test_details.setColumnCount(2)
         self.__test_details.setHeaderLabels(["Student", "Points"])
-        self.__test_details.itemDoubleClicked.connect(self.__detail_double_clicked)
+        self.__test_details.itemDoubleClicked.connect(file_double_clicked)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__test_list)
@@ -67,24 +48,6 @@ class TestsTab:
                 self.__test_list.addTopLevelItem(test_item)
 
     def __test_selected(self):
-        fip = QFileIconProvider()
-
-        def points_or_none(points):
-            if points is None:
-                return "?"
-            else:
-                return str(points)
-
-        def add_files(files, item: QTreeWidgetItem):
-            for file in files:
-                if isinstance(file, StoredFile):
-                    file_item = FileItem([file.file_name], file)
-                else:
-                    file_item = QTreeWidgetItem([file.file_name])
-                file_item.setIcon(0, fip.icon(QFileInfo(file.file_name)))
-                item.addChild(file_item)
-                file_item.setFirstColumnSpanned(True)
-
         self.__test_details.clear()
 
         home_work_items = self.__test_list.selectedItems()
@@ -101,10 +64,6 @@ class TestsTab:
                 )
 
                 self.__test_details.addTopLevelItem(student_item)
-                add_files(test_points.files, student_item)
+                add_file_items(test_points.files, student_item)
 
             self.__test_details.expandAll()
-
-    def __detail_double_clicked(self, item, column):
-        if isinstance(item, FileItem):
-            QDesktopServices.openUrl(QUrl.fromLocalFile(item.file.file_path))

@@ -2,13 +2,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem
 
 from vgrabber.model import Teacher
+from .items import TeacherItem
 from ..guimodel import GuiModel
-
-
-class TeacherItem(QTreeWidgetItem):
-    def __init__(self, data, teacher):
-        super().__init__(data)
-        self.teacher = teacher
 
 
 class TeachersTab:
