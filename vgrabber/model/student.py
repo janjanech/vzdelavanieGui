@@ -14,7 +14,7 @@ class Student:
     group: str
     grades: List[StudentGrade]
     moodle_id: int
-    moodle_group: str
+    moodle_group: int
     moodle_email: str
     home_work_points: List[HomeWorkPoints]
     test_points: List[TestPoints]

@@ -17,7 +17,7 @@ class StudentsTab:
     def __init__(self, model):
         self.__student_list = QTreeWidget()
         self.__student_list.setSortingEnabled(True)
-        self.__student_list.setColumnCount(4)
+        self.__student_list.setColumnCount(5)
         self.__student_list.setHeaderLabels(["Number", "Full Name", "Group", "Moodle email", "Moodle group"])
         self.__student_list.itemSelectionChanged.connect(self.__student_selected)
 
