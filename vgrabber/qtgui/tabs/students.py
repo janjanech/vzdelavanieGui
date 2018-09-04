@@ -41,6 +41,7 @@ class StudentsTab:
 
     def __load_students(self):
         self.__student_list.clear()
+        self.__student_details.clear()
 
         if self.model.subject is not None:
             for student in self.model.subject.students:
