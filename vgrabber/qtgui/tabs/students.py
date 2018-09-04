@@ -1,7 +1,9 @@
-from PyQt5.QtCore import QFileInfo, Qt
+from PyQt5.QtCore import QFileInfo, Qt, QUrl
+from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QWidget, QVBoxLayout, QFileIconProvider, QSplitter
 
 from vgrabber.model import Student
+from vgrabber.model.files import StoredFile
 from ..guimodel import GuiModel
 
 
@@ -9,6 +11,14 @@ class StudentItem(QTreeWidgetItem):
     def __init__(self, data, student):
         super().__init__(data)
         self.student = student
+
+
+class FileItem(QTreeWidgetItem):
+    file: StoredFile
+
+    def __init__(self, data, file):
+        super().__init__(data)
+        self.file = file
 
 
 class StudentsTab:
@@ -24,6 +34,7 @@ class StudentsTab:
         self.__student_details = QTreeWidget()
         self.__student_details.setColumnCount(4)
         self.__student_details.setHeaderLabels(["Type", "Activity name", "Points", "Grade"])
+        self.__student_details.itemDoubleClicked.connect(self.__detail_double_clicked)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__student_list)
@@ -73,7 +84,10 @@ class StudentsTab:
 
         def add_files(files, item: QTreeWidgetItem):
             for file in files:
-                file_item = QTreeWidgetItem([file.file_name])
+                if isinstance(file, StoredFile):
+                    file_item = FileItem([file.file_name], file)
+                else:
+                    file_item = QTreeWidgetItem([file.file_name])
                 file_item.setIcon(0, fip.icon(QFileInfo(file.file_name)))
                 item.addChild(file_item)
                 file_item.setFirstColumnSpanned(True)
@@ -119,3 +133,7 @@ class StudentsTab:
                 add_files(grade.files, grade_item)
 
         self.__student_details.expandAll()
+
+    def __detail_double_clicked(self, item, column):
+        if isinstance(item, FileItem):
+            QDesktopServices.openUrl(QUrl.fromLocalFile(item.file.file_path))
