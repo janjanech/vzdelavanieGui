@@ -15,7 +15,7 @@ try:
     from vgrabber.qtgui.importing import LoginDialog, ImportSelectorDialog, QtCallbacks
 
     ALLOW_IMPORT = True
-except:
+except ImportError:
     print_exc()
     ALLOW_IMPORT = False
 
