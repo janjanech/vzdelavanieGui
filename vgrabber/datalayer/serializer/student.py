@@ -1,5 +1,3 @@
-from os.path import relpath
-
 from lxml.etree import Element
 
 from vgrabber.model import Student

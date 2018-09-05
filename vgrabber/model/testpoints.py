@@ -1,5 +1,3 @@
-import os.path
-
 from .files import FileList
 from .test import Test
 
@@ -19,12 +17,3 @@ class TestPoints:
 
     def clear_files(self):
         self.files.clear()
-
-    def save(self, old_file_accessor_root, file_accessor):
-        self.files.save(
-            old_file_accessor_root,
-            file_accessor.open_folder(
-                'tests',
-                str(self.test.id)
-            )
-        )

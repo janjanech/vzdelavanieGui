@@ -6,3 +6,5 @@ from .teacher import Teacher
 from .test import Test
 from .homework import HomeWork, HomeWorkCategory
 from .group import Group
+from .homeworkpoints import HomeWorkPoints
+from .testpoints import TestPoints

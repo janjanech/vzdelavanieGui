@@ -1,7 +1,5 @@
-import os.path
 from typing import List
 
-from vgrabber.utilities.accents import strip_accents
 from .grade import StudentGrade
 from .homeworkpoints import HomeWorkPoints
 from .testpoints import TestPoints
@@ -123,17 +121,3 @@ class Student:
             for group in teacher.taught_groups:
                 if group.moodle_id == self.moodle_group_id:
                     return group
-
-    def save(self, old_file_accessor_root, file_accessor):
-        student_dir = file_accessor.open_folder(
-            '{0}_{1}{2}'.format(self.number, strip_accents(self.surname), strip_accents(self.name))
-        )
-
-        for grade in self.grades:
-            grade.save(old_file_accessor_root, student_dir)
-
-        for home_work_point in self.home_work_points:
-            home_work_point.save(old_file_accessor_root, student_dir)
-
-        for test_points in self.test_points:
-            test_points.save(old_file_accessor_root, student_dir)

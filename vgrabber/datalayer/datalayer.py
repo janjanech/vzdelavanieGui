@@ -2,6 +2,7 @@ from typing import Optional
 
 from lxml.etree import parse, xmlfile
 
+from vgrabber.datalayer.filesaver import FileSaver
 from vgrabber.model import Subject
 from .deserializer import SubjectDeserializer
 from .fileaccessors import FileAccessor
@@ -26,7 +27,7 @@ class DataLayer:
         return self.file_accessor is not None
 
     def save(self, subject: Subject):
-        subject.save(None, self.file_accessor)
+        FileSaver(None, self.file_accessor).save_subject_files(subject)
 
         self.__save(subject)
 
@@ -34,7 +35,7 @@ class DataLayer:
         old_file_accessor = self.file_accessor
         self.file_accessor = file_accessor
 
-        subject.save(old_file_accessor, self.file_accessor)
+        FileSaver(old_file_accessor, self.file_accessor).save_subject_files(subject)
 
         self.__save(subject)
 

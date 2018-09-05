@@ -150,7 +150,3 @@ class Subject:
             teacher = Teacher(self, None, None, None, None)
             self.teachers.append(teacher)
             return teacher
-
-    def save(self, old_file_accessor_root, file_accessor):
-        for student in self.students:
-            student.save(old_file_accessor_root, file_accessor)

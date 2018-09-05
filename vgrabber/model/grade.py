@@ -1,4 +1,3 @@
-import os.path
 from enum import Enum, auto
 
 from .files import FileList
@@ -34,12 +33,3 @@ class StudentGrade:
 
     def clear_files(self):
         self.files.clear()
-
-    def save(self, old_file_accessor_root, file_accessor):
-        self.files.save(
-            old_file_accessor_root,
-            file_accessor.open_folder(
-                'finalexams',
-                '{0}_{1}'.format(self.final_exam.id, self.final_exam.date_time.isoformat())
-            )
-        )

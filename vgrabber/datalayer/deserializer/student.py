@@ -1,5 +1,3 @@
-import os.path
-
 from vgrabber.model import Student, StudentGrade, Grade
 from vgrabber.model.files import StoredFile
 

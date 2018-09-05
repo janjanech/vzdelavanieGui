@@ -3,11 +3,8 @@ from traceback import format_exc, print_exc
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFileDialog, QMessageBox
-from lxml.etree import parse, xmlfile
 
-from vgrabber.datalayer.deserializer import SubjectDeserializer
 from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor
-from vgrabber.datalayer.serializer import SubjectSerializer
 from .guimodel import GuiModel
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
 

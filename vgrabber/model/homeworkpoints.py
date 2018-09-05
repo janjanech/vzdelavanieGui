@@ -1,5 +1,3 @@
-import os.path
-
 from .files import FileList
 from .homework import HomeWork
 
@@ -19,12 +17,3 @@ class HomeWorkPoints:
 
     def clear_files(self):
         self.files.clear()
-
-    def save(self, old_file_accessor_root, file_accessor):
-        self.files.save(
-            old_file_accessor_root,
-            file_accessor.open_folder(
-                'homeworks',
-                str(self.home_work.id)
-            )
-        )
