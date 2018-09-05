@@ -172,7 +172,7 @@ class MainWindow:
         recentFileList: List[str] = settings.value("recentFileList", defaultValue=[])
         if file in recentFileList:
             recentFileList.remove(file)
-        recentFileList.append(file)
+        recentFileList.insert(0, file)
         settings.setValue("recentFileList", recentFileList)
         self.__refresh_recents()
 
