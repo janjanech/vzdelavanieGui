@@ -1,11 +1,11 @@
-from os.path import dirname
+from os.path import dirname, basename, isdir
 from traceback import format_exc, print_exc
+from typing import List
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSettings
 from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFileDialog, QMessageBox
 
 from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor, ZipFileAccessor
-from .guimodel import GuiModel
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
 
 try:
@@ -28,6 +28,7 @@ class MainWindow:
         self.__window.setMinimumSize(600, 600)
         self.__build_menu()
         self.__build_tabs()
+        self.__refresh_recents()
 
         self.model.subject_changed.connect(self.__subject_changed)
 
@@ -40,6 +41,7 @@ class MainWindow:
         file_menu.addSeparator()
         self.__open_action = file_menu.addAction("Open...")
         self.__open_action.triggered.connect(self.__open_clicked)
+        self.__recent_menu = file_menu.addMenu("Recent files")
         self.__save_action = file_menu.addAction("Save")
         self.__save_action.triggered.connect(self.__save_clicked)
         self.__save_action.setEnabled(False)
@@ -121,8 +123,11 @@ class MainWindow:
         if file_name:
             if 'zip' in filter:
                 accessor = ZipFileAccessor(file_name)
+                self.__add_current_file(file_name)
             else:
-                accessor = DirectoryFileAccessor(dirname(file_name))
+                dir_name = dirname(file_name)
+                accessor = DirectoryFileAccessor(dir_name)
+                self.__add_current_file(dir_name)
 
             try:
                 self.model.load(accessor)
@@ -149,8 +154,11 @@ class MainWindow:
         if file_name:
             if 'zip' in filter:
                 accessor = ZipFileAccessor(file_name)
+                self.__add_current_file(file_name)
             else:
-                accessor = DirectoryFileAccessor(dirname(file_name))
+                dir_name = dirname(file_name)
+                self.__add_current_file(dir_name)
+                accessor = DirectoryFileAccessor(dir_name)
             self.model.save_as(accessor)
 
     def __close_clicked(self, *args):
@@ -159,5 +167,33 @@ class MainWindow:
     def __exit_clicked(self, *args):
         QApplication.exit(0)
 
+    def __add_current_file(self, file):
+        settings = QSettings()
+        recentFileList: List[str] = settings.value("recentFileList", defaultValue=[])
+        if file in recentFileList:
+            recentFileList.remove(file)
+        recentFileList.append(file)
+        settings.setValue("recentFileList", recentFileList)
+        self.__refresh_recents()
+
     def show(self):
         self.__window.showMaximized()
+
+    def __refresh_recents(self):
+        settings = QSettings()
+        recentFileList: List[str] = settings.value("recentFileList", defaultValue=[])
+        self.__recent_menu.clear()
+        for file in recentFileList:
+            action = self.__recent_menu.addAction(basename(file))
+            self.__connect_recent_menu_action(action, file)
+
+    def __connect_recent_menu_action(self, action, file):
+        def open():
+            if isdir(file):
+                accessor = DirectoryFileAccessor(file)
+            else:
+                accessor = ZipFileAccessor(file)
+            self.model.load(accessor)
+            self.__add_current_file(file)
+        action.triggered.connect(open)
+

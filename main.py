@@ -7,6 +7,9 @@ from vgrabber.qtgui.mainwindow import MainWindow
 
 app = QApplication(sys.argv)
 
+app.setOrganizationName("Jan Janech")
+app.setApplicationName("vzdelavanieGui")
+
 model = GuiModel()
 
 main_window = MainWindow(model)
