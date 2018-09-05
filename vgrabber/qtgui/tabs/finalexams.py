@@ -19,7 +19,9 @@ class FinalExamsTab:
         self.__final_exam_details = QTreeWidget()
         self.__final_exam_details.setColumnCount(3)
         self.__final_exam_details.setHeaderLabels(["Student", "Points", "Grade"])
-        self.__final_exam_details.itemDoubleClicked.connect(file_double_clicked)
+        self.__final_exam_details.itemDoubleClicked.connect(
+            lambda item, column: file_double_clicked(self.model, item)
+        )
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__final_exam_list)

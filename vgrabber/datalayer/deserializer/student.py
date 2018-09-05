@@ -5,13 +5,12 @@ from vgrabber.model.files import StoredFile
 
 
 class StudentDeserializer:
-    def __init__(self, subject, tests, home_works, final_exams, student_element, path):
+    def __init__(self, subject, tests, home_works, final_exams, student_element):
         self.__subject = subject
         self.__tests = {test.id: test for test in tests}
         self.__home_works = {home_work.id: home_work for home_work in home_works}
         self.__final_exams = {final_exam.id: final_exam for final_exam in final_exams}
         self.__student_element = student_element
-        self.__path = path
 
     def deserialize(self):
         student = Student(
@@ -73,5 +72,5 @@ class StudentDeserializer:
         for file_element in parent_element.xpath('./file'):
             yield StoredFile(
                 file_element.attrib['filename'],
-                os.path.join(self.__path, file_element.attrib['path'])
+                file_element.attrib['path']
             )

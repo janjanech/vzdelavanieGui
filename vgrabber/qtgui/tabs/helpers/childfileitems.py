@@ -19,6 +19,7 @@ def add_file_items(files, parent_item: QTreeWidgetItem):
         file_item.setFirstColumnSpanned(True)
 
 
-def file_double_clicked(item, column):
+def file_double_clicked(model, item):
     if isinstance(item, FileItem):
-        QDesktopServices.openUrl(QUrl.fromLocalFile(item.file.file_path))
+        file_path = model.data_layer.open_file_for_external_app(item.file.file_path)
+        QDesktopServices.openUrl(QUrl.fromLocalFile(file_path))

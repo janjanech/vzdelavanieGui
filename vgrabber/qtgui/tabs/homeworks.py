@@ -19,7 +19,9 @@ class HomeWorksTab:
         self.__home_work_details = QTreeWidget()
         self.__home_work_details.setColumnCount(2)
         self.__home_work_details.setHeaderLabels(["Student", "Points"])
-        self.__home_work_details.itemDoubleClicked.connect(file_double_clicked)
+        self.__home_work_details.itemDoubleClicked.connect(
+            lambda item, column: file_double_clicked(self.model, item)
+        )
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__home_work_list)

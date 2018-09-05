@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFi
 from lxml.etree import parse, xmlfile
 
 from vgrabber.datalayer.deserializer import SubjectDeserializer
+from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor
 from vgrabber.datalayer.serializer import SubjectSerializer
 from .guimodel import GuiModel
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
@@ -77,8 +78,8 @@ class MainWindow:
         self.__set_title()
 
         has_model = self.model.subject is not None
-        self.__save_action.setEnabled(has_model and self.model.saved_as is not None)
-        self.__save_as_action.setEnabled(has_model and self.model.saved_as is None)
+        self.__save_action.setEnabled(has_model and self.model.data_layer.can_save)
+        self.__save_as_action.setEnabled(has_model)
         self.__close_action.setEnabled(has_model)
         self.__tabWidget.setEnabled(has_model)
 
@@ -122,9 +123,7 @@ class MainWindow:
 
         if file_name:
             try:
-                with open(file_name, 'rb') as xf:
-                    model = SubjectDeserializer(parse(xf).getroot(), dirname(file_name)).deserialize()
-                self.model.use_subject(model, file_name)
+                self.model.load(DirectoryFileAccessor(dirname(file_name)))
             except Exception:
                 print_exc()
                 exc = format_exc()
@@ -136,7 +135,7 @@ class MainWindow:
                 message_box.exec()
 
     def __save_clicked(self, *args):
-        self.__save(self.model.saved_as)
+        self.model.save()
 
     def __save_as_clicked(self, *args):
         file_name, filter = QFileDialog.getSaveFileName(
@@ -145,32 +144,14 @@ class MainWindow:
             filter="Imported data (subjectinfo.xml)"
         )
 
-        subject = self.__save(file_name)
-        self.model.use_subject(subject, file_name)
+        if file_name:
+            self.model.save_as(DirectoryFileAccessor(dirname(file_name)))
 
     def __close_clicked(self, *args):
         self.model.use_subject(None)
 
     def __exit_clicked(self, *args):
         QApplication.exit(0)
-
-    def __save(self, file_name):
-        subject = self.model.subject
-
-        dir_name = dirname(file_name)
-
-        subject.save(dir_name)
-
-        root_element = SubjectSerializer(subject, dir_name).serialize()
-
-        with xmlfile(open(file_name, 'wb'), encoding='utf-8') as xf:
-            xf.write_declaration()
-            xf.write(
-                root_element,
-                pretty_print=True
-            )
-
-        return subject
 
     def show(self):
         self.__window.showMaximized()

@@ -21,7 +21,9 @@ class StudentsTab:
         self.__student_details = QTreeWidget()
         self.__student_details.setColumnCount(4)
         self.__student_details.setHeaderLabels(["Type", "Activity name", "Points", "Grade"])
-        self.__student_details.itemDoubleClicked.connect(file_double_clicked)
+        self.__student_details.itemDoubleClicked.connect(
+            lambda item, column: file_double_clicked(self.model, item)
+        )
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__student_list)

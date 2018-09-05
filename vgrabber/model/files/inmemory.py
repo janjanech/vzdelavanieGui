@@ -9,13 +9,12 @@ class InMemoryFile:
         self.file_name = file_name
         self.__data = data
 
-    def save(self, directory):
-        file_path = os.path.join(directory, correct_file_name(self.file_name))
+    def save(self, old_file_accessor_root, file_accessor):
+        file_accessor.ensure_exists()
 
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+        file_name = correct_file_name(self.file_name)
 
-        with open(file_path, 'wb') as f:
+        with file_accessor.open_file(file_name, 'w') as f:
             f.write(self.__data)
 
-        return StoredFile(self.file_name, file_path)
+        return StoredFile(self.file_name, file_accessor.get_relative_path(file_name))

@@ -35,10 +35,10 @@ class StudentGrade:
     def clear_files(self):
         self.files.clear()
 
-    def save(self, directory):
+    def save(self, old_file_accessor_root, file_accessor):
         self.files.save(
-            os.path.join(
-                directory,
+            old_file_accessor_root,
+            file_accessor.open_folder(
                 'finalexams',
                 '{0}_{1}'.format(self.final_exam.id, self.final_exam.date_time.isoformat())
             )

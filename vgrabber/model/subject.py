@@ -151,6 +151,6 @@ class Subject:
             self.teachers.append(teacher)
             return teacher
 
-    def save(self, directory):
+    def save(self, old_file_accessor_root, file_accessor):
         for student in self.students:
-            student.save(directory)
+            student.save(old_file_accessor_root, file_accessor)

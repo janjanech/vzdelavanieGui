@@ -8,9 +8,8 @@ from vgrabber.model import Student
 class StudentSerializer:
     __student: Student
 
-    def __init__(self, student, path):
+    def __init__(self, student):
         self.__student = student
-        self.__path = path
 
     def serialize(self):
         optional_info = {}
@@ -86,7 +85,7 @@ class StudentSerializer:
         for file in files:
             file_element = Element(
                 'file',
-                path=relpath(file.file_path, self.__path),
+                path=file.file_path,
                 filename=file.file_name
             )
 

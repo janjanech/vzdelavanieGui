@@ -19,7 +19,9 @@ class TestsTab:
         self.__test_details = QTreeWidget()
         self.__test_details.setColumnCount(2)
         self.__test_details.setHeaderLabels(["Student", "Points"])
-        self.__test_details.itemDoubleClicked.connect(file_double_clicked)
+        self.__test_details.itemDoubleClicked.connect(
+            lambda item, column: file_double_clicked(self.model, item)
+        )
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__test_list)

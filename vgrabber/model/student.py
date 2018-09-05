@@ -124,16 +124,16 @@ class Student:
                 if group.moodle_id == self.moodle_group_id:
                     return group
 
-    def save(self, directory):
-        student_dir = os.path.join(
-            directory,
+    def save(self, old_file_accessor_root, file_accessor):
+        student_dir = file_accessor.open_folder(
             '{0}_{1}{2}'.format(self.number, strip_accents(self.surname), strip_accents(self.name))
         )
+
         for grade in self.grades:
-            grade.save(student_dir)
+            grade.save(old_file_accessor_root, student_dir)
 
         for home_work_point in self.home_work_points:
-            home_work_point.save(student_dir)
+            home_work_point.save(old_file_accessor_root, student_dir)
 
         for test_points in self.test_points:
-            test_points.save(student_dir)
+            test_points.save(old_file_accessor_root, student_dir)
