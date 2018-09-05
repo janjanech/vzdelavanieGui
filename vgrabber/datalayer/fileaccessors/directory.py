@@ -30,3 +30,6 @@ class DirectoryFileAccessor(FileAccessor):
             return '/'.join(names)
         else:
             return '/'.join([self.__intern_path, *names])
+
+    def close(self):
+        pass

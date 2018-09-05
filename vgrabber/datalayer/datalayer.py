@@ -18,6 +18,9 @@ class DataLayer:
         self.file_accessor = None
 
     def load(self, file_accessor: FileAccessor) -> Subject:
+        if self.file_accessor is not None:
+            self.file_accessor.close()
+
         self.file_accessor = file_accessor
         with self.file_accessor.open_file(self.SUBJECT_INFO_NAME, 'r') as xf:
             return SubjectDeserializer(parse(xf).getroot()).deserialize()
@@ -37,6 +40,9 @@ class DataLayer:
 
         FileSaver(old_file_accessor, self.file_accessor).save_subject_files(subject)
 
+        if old_file_accessor is not None:
+            old_file_accessor.close()
+
         self.__save(subject)
 
     def __save(self, subject: Subject):
@@ -54,4 +60,6 @@ class DataLayer:
         return self.file_accessor.open_file_for_external_app(rel_path)
 
     def close(self):
-        self.file_accessor = None
+        if self.file_accessor is not None:
+            self.file_accessor.close()
+            self.file_accessor = None

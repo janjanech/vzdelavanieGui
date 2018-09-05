@@ -2,11 +2,18 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
+from vgrabber.qtgui.guimodel import GuiModel
 from vgrabber.qtgui.mainwindow import MainWindow
 
 app = QApplication(sys.argv)
 
-main_window = MainWindow()
+model = GuiModel()
+
+main_window = MainWindow(model)
 main_window.show()
 
-sys.exit(app.exec())
+ret = app.exec()
+
+model.quit()
+
+sys.exit(ret)

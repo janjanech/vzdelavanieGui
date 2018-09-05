@@ -20,5 +20,9 @@ class FileAccessor(ABC):
         pass
 
     @abstractmethod
-    def get_relative_path(self, name: str) -> str:
+    def get_relative_path(self, *names: str) -> str:
+        pass
+
+    @abstractmethod
+    def close(self):
         pass

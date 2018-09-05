@@ -36,3 +36,6 @@ class GuiModel(QObject):
     def use_subject(self, subject):
         self.subject = subject
         self.subject_changed.emit()
+
+    def quit(self):
+        self.data_layer.close()

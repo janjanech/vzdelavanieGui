@@ -4,7 +4,7 @@ from traceback import format_exc, print_exc
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFileDialog, QMessageBox
 
-from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor
+from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor, ZipFileAccessor
 from .guimodel import GuiModel
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
 
@@ -19,8 +19,8 @@ except ImportError:
 
 
 class MainWindow:
-    def __init__(self):
-        self.model = GuiModel()
+    def __init__(self, model):
+        self.model = model
         self.__tabs = []  # keeps references to tab instances
 
         self.__window = QMainWindow()
@@ -115,12 +115,17 @@ class MainWindow:
         file_name, filter = QFileDialog.getOpenFileName(
             self.__window,
             caption="Open Data",
-            filter="Imported data (subjectinfo.xml)"
+            filter="Imported data (subjectinfo.xml);;Zipped imported data (*.zip)"
         )
 
         if file_name:
+            if 'zip' in filter:
+                accessor = ZipFileAccessor(file_name)
+            else:
+                accessor = DirectoryFileAccessor(dirname(file_name))
+
             try:
-                self.model.load(DirectoryFileAccessor(dirname(file_name)))
+                self.model.load(accessor)
             except Exception:
                 print_exc()
                 exc = format_exc()
@@ -138,11 +143,15 @@ class MainWindow:
         file_name, filter = QFileDialog.getSaveFileName(
             self.__window,
             caption="Save Data",
-            filter="Imported data (subjectinfo.xml)"
+            filter="Imported data (subjectinfo.xml);;Zipped imported data (*.zip)"
         )
 
         if file_name:
-            self.model.save_as(DirectoryFileAccessor(dirname(file_name)))
+            if 'zip' in filter:
+                accessor = ZipFileAccessor(file_name)
+            else:
+                accessor = DirectoryFileAccessor(dirname(file_name))
+            self.model.save_as(accessor)
 
     def __close_clicked(self, *args):
         self.model.use_subject(None)
