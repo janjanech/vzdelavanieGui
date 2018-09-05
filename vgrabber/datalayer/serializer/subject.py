@@ -1,7 +1,7 @@
 from lxml.etree import Element
 
 from vgrabber.model import Subject
-from vgrabber.serializer.homeworkcategory import HomeWorkCategorySerializer
+from .homeworkcategory import HomeWorkCategorySerializer
 from .test import TestSerializer
 from .teacher import TeacherSerializer
 from .student import StudentSerializer
