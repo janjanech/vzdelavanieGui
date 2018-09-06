@@ -1,3 +1,6 @@
+import zipfile
+from io import BytesIO
+
 from PyQt5.QtWidgets import QTextEdit
 
 from vgrabber.model.files import InMemoryFile, StoredFile
@@ -36,14 +39,41 @@ class FileDetailsWidget:
         elif file.file_name.endswith(('.html', '.htm')):
             self.widget.setHtml(self.__get_string(file))
             self.widget.setVisible(True)
+        elif file.file_name.endswith('.zip'):
+            self.widget.setHtml(self.__format_zip_content(file))
+            self.widget.setVisible(True)
         else:
             self.widget.setVisible(False)
 
+    def __format_zip_content(self, file):
+        def format_recursive(cur: dict):
+            ret = []
+            for name, content in sorted(cur.items()):
+                if content:
+                    ret.append(f"<li>{name}{format_recursive(content)}</li>")
+                else:
+                    ret.append(f"<li>{name}</li>")
+            return f"<ul>{''.join(ret)}</ul>"
+
+        return format_recursive(self.__get_zip_content(file))
+
+    def __get_zip_content(self, file):
+        with zipfile.ZipFile(BytesIO(self.__get_data(file))) as f:
+            ret = {}
+            for path in f.namelist():
+                cur = ret
+                for component in path.split('/'):
+                    cur = cur.setdefault(component, {})
+            return ret
+
     def __get_string(self, file):
+        return self.__get_data(file).decode('utf8')
+
+    def __get_data(self, file):
         if isinstance(file, InMemoryFile):
-            return file.data.decode('utf8')
+            return file.data
         elif isinstance(file, StoredFile):
             with self.model.data_layer.file_accessor.open_file(file.file_path, 'r') as f:
-                return f.read().decode('utf8')
+                return f.read()
         else:
-            return ''
+            return b''
