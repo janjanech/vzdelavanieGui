@@ -1,7 +1,9 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QTextEdit
 
 from vgrabber.model import HomeWork
+from vgrabber.model.files import InMemoryFile, StoredFile
+from vgrabber.qtgui.tabs.items import FileItem
 from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none
 from ..guimodel import GuiModel
@@ -22,10 +24,19 @@ class HomeWorksTab:
         self.__home_work_details.itemDoubleClicked.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
+        self.__home_work_details.itemSelectionChanged.connect(self.__home_work_file_selected)
+
+        self.__home_work_detail_text = QTextEdit()
+        self.__home_work_detail_text.setReadOnly(True)
+        self.__home_work_detail_text.setVisible(False)
+
+        details_splitter = QSplitter(Qt.Horizontal)
+        details_splitter.addWidget(self.__home_work_details)
+        details_splitter.addWidget(self.__home_work_detail_text)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__home_work_list)
-        self.widget.addWidget(self.__home_work_details)
+        self.widget.addWidget(details_splitter)
         self.widget.setStretchFactor(0, 3)
         self.widget.setStretchFactor(1, 1)
 
@@ -40,6 +51,7 @@ class HomeWorksTab:
     def __load_home_works(self):
         self.__home_work_list.clear()
         self.__home_work_details.clear()
+        self.__home_work_detail_text.setVisible(False)
 
         if self.model.subject is not None:
             for category in self.model.subject.home_work_categories:
@@ -57,6 +69,7 @@ class HomeWorksTab:
 
     def __home_work_selected(self):
         self.__home_work_details.clear()
+        self.__home_work_detail_text.setVisible(False)
 
         home_work_items = self.__home_work_list.selectedItems()
         if home_work_items and isinstance(home_work_items[0], HomeWorkItem):
@@ -75,3 +88,37 @@ class HomeWorksTab:
                 add_file_items(home_work_points.files, student_item)
 
             self.__home_work_details.expandAll()
+
+    def __home_work_file_selected(self):
+        file_items = self.__home_work_details.selectedItems()
+        if not file_items:
+            self.__home_work_detail_text.setVisible(False)
+            return
+
+        file_item = file_items[0]
+
+        if not isinstance(file_item, FileItem):
+            self.__home_work_detail_text.setVisible(False)
+            return
+
+        if not file_item.file.file_name.endswith(('.txt', '.html', '.htm')):
+            self.__home_work_detail_text.setVisible(False)
+            return
+
+        if file_item.file.file_name.endswith('.txt'):
+            self.__home_work_detail_text.setText(self.__get_string(file_item.file))
+            self.__home_work_detail_text.setVisible(True)
+        elif file_item.file.file_name.endswith(('.html', '.htm')):
+            self.__home_work_detail_text.setHtml(self.__get_string(file_item.file))
+            self.__home_work_detail_text.setVisible(True)
+        else:
+            self.__home_work_detail_text.setVisible(False)
+
+    def __get_string(self, file):
+        if isinstance(file, InMemoryFile):
+            return file.data.decode('utf8')
+        elif isinstance(file, StoredFile):
+            with self.model.data_layer.file_accessor.open_file(file.file_path, 'r') as f:
+                return f.read().decode('utf8')
+        else:
+            return ''
