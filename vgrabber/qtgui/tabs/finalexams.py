@@ -14,6 +14,7 @@ class FinalExamsTab:
     def __init__(self, model):
         self.__final_exam_list = QTreeWidget()
         self.__final_exam_list.setHeaderLabels(["Date and time", "Room"])
+        self.__final_exam_list.setHeaderLabels(["Date", "Time", "Day", "Room"])
         self.__final_exam_list.itemSelectionChanged.connect(self.__final_exam_selected)
 
         self.__final_exam_details = QTreeWidget()
@@ -44,7 +45,12 @@ class FinalExamsTab:
         if self.model.subject is not None:
             for final_exam in self.model.subject.final_exams:
                 final_exam_item = FinalExamItem(
-                    [final_exam.date_time.strftime("%c"), final_exam.room],
+                    [
+                        final_exam.date_time.strftime("%d.%m.%Y"),
+                        final_exam.date_time.strftime("%H:%M"),
+                        final_exam.date_time.strftime("%A"),
+                        final_exam.room
+                    ],
                     final_exam
                 )
                 self.__final_exam_list.addTopLevelItem(final_exam_item)
