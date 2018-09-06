@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QSplitter
 
 from vgrabber.model import FinalExam
+from vgrabber.qtgui.tabs.widgets.filedetails import FileDetailsWidget
 from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none, grade_or_none
 from ..guimodel import GuiModel
@@ -23,10 +24,17 @@ class FinalExamsTab:
         self.__final_exam_details.itemDoubleClicked.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
+        self.__final_exam_details.itemSelectionChanged.connect(self.__final_exam_file_selected)
+
+        self.__final_exam_file_details = FileDetailsWidget(model)
+
+        details_splitter = QSplitter(Qt.Horizontal)
+        details_splitter.addWidget(self.__final_exam_details)
+        details_splitter.addWidget(self.__final_exam_file_details.widget)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__final_exam_list)
-        self.widget.addWidget(self.__final_exam_details)
+        self.widget.addWidget(details_splitter)
         self.widget.setStretchFactor(0, 3)
         self.widget.setStretchFactor(1, 1)
 
@@ -76,3 +84,8 @@ class FinalExamsTab:
                 add_file_items(grade.files, student_item)
 
             self.__final_exam_details.expandAll()
+
+    def __final_exam_file_selected(self):
+        self.__final_exam_file_details.master_selection_changed(
+            self.__final_exam_details.selectedItems()
+        )

@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QSplitter
 
 from vgrabber.model import Student
+from vgrabber.qtgui.tabs.widgets.filedetails import FileDetailsWidget
 from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none, grade_or_none
 from .items import StudentItem
@@ -24,10 +25,17 @@ class StudentsTab:
         self.__student_details.itemDoubleClicked.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
+        self.__student_details.itemSelectionChanged.connect(self.__student_file_selected)
+
+        self.__student_file_details = FileDetailsWidget(model)
+
+        details_splitter = QSplitter(Qt.Horizontal)
+        details_splitter.addWidget(self.__student_details)
+        details_splitter.addWidget(self.__student_file_details.widget)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__student_list)
-        self.widget.addWidget(self.__student_details)
+        self.widget.addWidget(details_splitter)
         self.widget.setStretchFactor(0, 3)
         self.widget.setStretchFactor(1, 1)
 
@@ -99,3 +107,8 @@ class StudentsTab:
                 add_file_items(grade.files, grade_item)
 
         self.__student_details.expandAll()
+
+    def __student_file_selected(self):
+        self.__student_file_details.master_selection_changed(
+            self.__student_details.selectedItems()
+        )
