@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QSplitter
 
 from vgrabber.model import Test
+from vgrabber.qtgui.tabs.widgets.filedetails import FileDetailsWidget
 from ..guimodel import GuiModel
 from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none
@@ -22,10 +23,17 @@ class TestsTab:
         self.__test_details.itemDoubleClicked.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
+        self.__test_details.itemSelectionChanged.connect(self.__test_file_selected)
+
+        self.__test_file_details = FileDetailsWidget(model)
+
+        details_splitter = QSplitter(Qt.Horizontal)
+        details_splitter.addWidget(self.__test_details)
+        details_splitter.addWidget(self.__test_file_details.widget)
 
         self.widget = QSplitter(Qt.Vertical)
         self.widget.addWidget(self.__test_list)
-        self.widget.addWidget(self.__test_details)
+        self.widget.addWidget(details_splitter)
         self.widget.setStretchFactor(0, 3)
         self.widget.setStretchFactor(1, 1)
 
@@ -69,3 +77,8 @@ class TestsTab:
                 add_file_items(test_points.files, student_item)
 
             self.__test_details.expandAll()
+
+    def __test_file_selected(self):
+        self.__test_file_details.master_selection_changed(
+            self.__test_details.selectedItems()
+        )
