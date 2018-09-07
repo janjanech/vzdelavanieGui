@@ -22,7 +22,7 @@ class StudentsTab:
         self.__student_details = QTreeWidget()
         self.__student_details.setColumnCount(4)
         self.__student_details.setHeaderLabels(["Type", "Activity name", "Points", "Grade"])
-        self.__student_details.itemDoubleClicked.connect(
+        self.__student_details.itemActivated.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
         self.__student_details.itemSelectionChanged.connect(self.__student_file_selected)

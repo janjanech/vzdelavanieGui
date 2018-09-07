@@ -20,7 +20,7 @@ class HomeWorksTab:
         self.__home_work_details = QTreeWidget()
         self.__home_work_details.setColumnCount(2)
         self.__home_work_details.setHeaderLabels(["Student", "Points"])
-        self.__home_work_details.itemDoubleClicked.connect(
+        self.__home_work_details.itemActivated.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
         self.__home_work_details.itemSelectionChanged.connect(self.__home_work_file_selected)

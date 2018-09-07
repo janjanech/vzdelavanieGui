@@ -20,7 +20,7 @@ class TestsTab:
         self.__test_details = QTreeWidget()
         self.__test_details.setColumnCount(2)
         self.__test_details.setHeaderLabels(["Student", "Points"])
-        self.__test_details.itemDoubleClicked.connect(
+        self.__test_details.itemActivated.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
         self.__test_details.itemSelectionChanged.connect(self.__test_file_selected)

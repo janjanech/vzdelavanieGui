@@ -21,7 +21,7 @@ class FinalExamsTab:
         self.__final_exam_details = QTreeWidget()
         self.__final_exam_details.setColumnCount(3)
         self.__final_exam_details.setHeaderLabels(["Student", "Points", "Grade"])
-        self.__final_exam_details.itemDoubleClicked.connect(
+        self.__final_exam_details.itemActivated.connect(
             lambda item, column: file_double_clicked(self.model, item)
         )
         self.__final_exam_details.itemSelectionChanged.connect(self.__final_exam_file_selected)
