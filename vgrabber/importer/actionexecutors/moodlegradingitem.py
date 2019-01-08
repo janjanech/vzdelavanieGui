@@ -27,6 +27,7 @@ class MoodleGradingItemActionExecutor(ActionExecutor):
         model: Subject = self.__state.model
 
         browser.find_element_by_link_text('Nastavenie hodnotenia').click()
+        browser.find_element_by_link_text('Výkaz používateľa').click()
 
         grade_items = []
 
