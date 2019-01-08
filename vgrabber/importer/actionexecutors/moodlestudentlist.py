@@ -47,7 +47,7 @@ class MoodleStudentListActionExecutor(ActionExecutor):
                 img_link_parsed = urlparse(img_link.get_attribute('href'))
                 moodle_id = int(parse_qs(img_link_parsed.query)['id'][0])
 
-                name, surname = img_link.text.strip().rsplit(None, 1)
+                surname, name = img_link.text.strip().rsplit(None, 1)
 
                 email = row.find_element_by_css_selector('td.c2').text
 
