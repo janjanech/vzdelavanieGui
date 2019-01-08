@@ -53,9 +53,11 @@ class MoodleGradesActionExecutor(ActionExecutor):
 
         to_send.update(self.__force_data)
 
+        form_url = browser.find_element_by_xpath("//form[@id='mform1']").get_attribute('action')
+
         exported_csv = browser.request(
             'POST',
-            'https://vzdelavanie.uniza.sk/moodle3/grade/export/txt/export.php',
+            form_url,
             data = to_send
         ).text
 
