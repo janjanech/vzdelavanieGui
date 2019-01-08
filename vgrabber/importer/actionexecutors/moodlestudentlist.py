@@ -1,3 +1,4 @@
+import json
 from urllib.parse import urlparse, parse_qs
 
 import logging
@@ -24,34 +25,41 @@ class MoodleStudentListActionExecutor(ActionExecutor):
         browser.find_element_by_xpath("//span[text()='Používatelia']").click()
         browser.find_element_by_link_text("Zapísaní do kurzu").click()
 
-        if import_students:
-            students = [
-                (strip_accents(student.surname), strip_accents(student.name), student)
-                    for student in model.students
-            ]
+        if import_teachers:
+            model.clear_teachers()
 
-            students_fullname_index = {(student[1], student[0]): student[2] for student in students}
-            students_fullname_index.update({(student[0], student[1]): student[2] for student in students})
+        students = [
+            (strip_accents(student.surname.lower()), strip_accents(student.name.lower()), student)
+                for student in model.students
+        ]
 
-            browser.find_element_by_xpath("//select[@name='role']/option[text()='Študent']").click()
-            browser.find_element_by_css_selector("input#id_submitbutton").click()
+        students_fullname_index = {(student[1], student[0]): student[2] for student in students}
+        students_fullname_index.update({(student[0], student[1]): student[2] for student in students})
 
-            while True:
-                for row in browser.find_elements_by_css_selector('tr.userinforow'):
-                    img_link = row.find_element_by_xpath(".//a[contains(img/@class, 'userpicture')]")
-                    img_link_parsed = urlparse(img_link.get_attribute('href'))
-                    moodle_id = int(parse_qs(img_link_parsed.query)['id'][0])
+        while True:
+            for row in browser.find_elements_by_css_selector('table#participants tbody tr'):
+                if row.get_attribute('class') == 'emptyrow':
+                    continue
+                role_element = row.find_element_by_xpath(".//span[@data-itemtype='user_roles']")
+                roles = json.loads(role_element.get_attribute('data-value'))
 
+                img_link = row.find_element_by_xpath(".//a[contains(img/@class, 'userpicture')]")
+                img_link_parsed = urlparse(img_link.get_attribute('href'))
+                moodle_id = int(parse_qs(img_link_parsed.query)['id'][0])
+
+                name, surname = img_link.text.strip().rsplit(None, 1)
+
+                email = row.find_element_by_css_selector('td.c2').text
+
+                if '5' in roles and import_students:
                     moodle_group = None
-                    for group in row.find_elements_by_css_selector("div.group"):
-                        moodle_group = int(group.get_attribute('rel'))
+                    for group_element in row.find_elements_by_xpath(".//span[@data-itemtype='user_groups']"):
+                        moodle_groups = json.loads(group_element.get_attribute('data-value'))
+                        if any(moodle_groups):
+                            moodle_group = int(moodle_groups[0])
                         break
 
-                    name, surname = row.find_element_by_css_selector('div.subfield_userfullnamedisplay').text.rsplit(None, 1)
-                    name_s, surname_s = strip_accents(name), strip_accents(surname)
-
-                    email = row.find_element_by_css_selector('div.subfield_email').text
-
+                    name_s, surname_s = strip_accents(name).lower(), strip_accents(surname).lower()
                     if (surname_s, name_s) in students_fullname_index:
                         student = students_fullname_index[(surname_s, name_s)]
                     elif (name_s, surname_s) in students_fullname_index:
@@ -69,31 +77,10 @@ class MoodleStudentListActionExecutor(ActionExecutor):
                     student.moodle_group_id = moodle_group
                     student.moodle_email = email
 
-                if not any(browser.find_elements_by_link_text("Ďalší")):
-                    break
-                browser.find_element_by_link_text("Ďalší").click()
-
-        if import_teachers:
-            browser.find_element_by_xpath("//select[@name='role']/option[text()='Učiteľ']").click()
-            browser.find_element_by_css_selector("input#id_submitbutton").click()
-
-            model.clear_teachers()
-
-            while True:
-                for row in browser.find_elements_by_css_selector('tr.userinforow'):
-                    img_link = row.find_element_by_xpath(".//a[contains(img/@class, 'userpicture')]")
-                    img_link_parsed = urlparse(img_link.get_attribute('href'))
-
-                    moodle_id = int(parse_qs(img_link_parsed.query)['id'][0])
-
-                    name, surname = row.find_element_by_css_selector('div.subfield_userfullnamedisplay').text.rsplit(None, 1)
-
-                    email = row.find_element_by_css_selector('div.subfield_email').text
-
+                if '3' in roles and import_teachers:
                     teacher = Teacher(model, name, surname, moodle_id, email)
                     model.add_teacher(teacher)
 
-                if not any(browser.find_elements_by_link_text("Ďalší")):
-                    break
-                browser.find_element_by_link_text("Ďalší").click()
-
+            if not any(browser.find_elements_by_link_text("Ďalší")):
+                break
+            browser.find_element_by_link_text("Ďalší").click()
