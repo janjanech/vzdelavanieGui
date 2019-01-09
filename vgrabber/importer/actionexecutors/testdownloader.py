@@ -113,8 +113,10 @@ class TestDownloaderActionExecutor(ActionExecutor):
 
         model.clear_test_files()
 
+        base_url = browser.find_element_by_link_text('Domov').get_attribute('href')
+
         for test in model.tests:
-            browser.get('https://vzdelavanie.uniza.sk/moodle3/mod/quiz/report.php?id={0}'.format(test.moodle_id))
+            browser.get(base_url + 'mod/quiz/report.php?id={0}'.format(test.moodle_id))
 
             while True:
                 for review_link in browser.find_elements_by_css_selector('a.reviewlink'):
