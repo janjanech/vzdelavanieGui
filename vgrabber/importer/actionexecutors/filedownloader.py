@@ -50,8 +50,10 @@ class FileDownloaderActionExecutor(ActionExecutor):
         browser: Chrome = self.__state.browser
         model: Subject = self.__state.model
 
+        base_url = browser.find_element_by_link_text('Domov').get_attribute('href')
+
         browser.get(
-            'https://vzdelavanie.uniza.sk/moodle3/mod/assign/view.php?id={0}&action=grading'.format(
+            base_url + 'mod/assign/view.php?id={0}&action=grading'.format(
                 moodle_id
             )
         )
