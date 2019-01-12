@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QTextEdit
+from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QTextEdit, QMenu
 
 from vgrabber.model import HomeWork
 from .widgets.filedetails import FileDetailsWidget
@@ -7,6 +7,7 @@ from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none
 from ..guimodel import GuiModel
 from .items import HomeWorkItem, StudentItem
+from ..editpointswindow import EditPointsWindow
 
 
 class HomeWorksTab:
@@ -16,6 +17,8 @@ class HomeWorksTab:
         self.__home_work_list = QTreeWidget()
         self.__home_work_list.setHeaderLabel("Name")
         self.__home_work_list.itemSelectionChanged.connect(self.__home_work_selected)
+        self.__home_work_list.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.__home_work_list.customContextMenuRequested.connect(self.__home_work_context_menu)
 
         self.__home_work_details = QTreeWidget()
         self.__home_work_details.setColumnCount(2)
@@ -90,3 +93,13 @@ class HomeWorksTab:
         self.__home_work_file_details.master_selection_changed(
             self.__home_work_details.selectedItems()
         )
+    
+    def __home_work_context_menu(self, pos):
+        item = self.__home_work_list.itemAt(pos)
+        
+        if isinstance(item, HomeWorkItem):
+            menu = QMenu()
+            menu.addAction("Edit points").triggered.connect(
+                lambda *args: EditPointsWindow(self.model, item.home_work).run()
+            )
+            menu.exec(self.__home_work_list.viewport().mapToGlobal(pos))

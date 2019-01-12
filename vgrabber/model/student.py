@@ -1,5 +1,8 @@
 from typing import List
 
+from .homework import HomeWork
+from .test import Test
+from .finalexam import FinalExam
 from .grade import StudentGrade
 from .homeworkpoints import HomeWorkPoints
 from .testpoints import TestPoints
@@ -121,3 +124,35 @@ class Student:
             for group in teacher.taught_groups:
                 if group.moodle_id == self.moodle_group_id:
                     return group
+    
+    def get_points_for(self, hw_test_or_exam):
+        if isinstance(hw_test_or_exam, HomeWork):
+            for home_work_points in self.home_work_points:
+                if home_work_points.home_work is hw_test_or_exam:
+                    return home_work_points
+        if isinstance(hw_test_or_exam, Test):
+            for test_points in self.test_points:
+                if test_points.test is hw_test_or_exam:
+                    return test_points
+        if isinstance(hw_test_or_exam, FinalExam):
+            for grade in self.grades:
+                if grade.final_exam is hw_test_or_exam:
+                    return grade
+
+    def set_points_for(self, hw_test_or_exam, points):
+        if isinstance(hw_test_or_exam, HomeWork):
+            for home_work_points in self.home_work_points:
+                if home_work_points.home_work is hw_test_or_exam:
+                    home_work_points.points = points
+            else:
+                self.add_home_work_points(hw_test_or_exam, points)
+        if isinstance(hw_test_or_exam, Test):
+            for test_points in self.test_points:
+                if test_points.test is hw_test_or_exam:
+                    test_points.points = points
+            else:
+                self.add_test_points(hw_test_or_exam, points)
+        if isinstance(hw_test_or_exam, FinalExam):
+            for grade in self.grades:
+                if grade.final_exam is hw_test_or_exam:
+                    grade.points = points
