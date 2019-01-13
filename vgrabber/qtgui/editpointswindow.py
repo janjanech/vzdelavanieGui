@@ -84,3 +84,4 @@ class EditPointsWindow:
         if self.__window.exec() == QDialog.Accepted:
             for student, points in self.__changes.items():
                 student.set_points_for(self.__owner_object, points)
+            self.model.data_edited()
