@@ -43,6 +43,18 @@ class StudentsTab:
         self.__load_students()
 
         self.model.subject_changed.connect(self.__subject_changed)
+    
+    @property
+    def headers(self):
+        hdr = self.__student_list.headerItem()
+        return [hdr.text(i) for i in range(hdr.columnCount())]
+    
+    @property
+    def data(self):
+        for no in range(self.__student_list.topLevelItemCount()):
+            item = self.__student_list.topLevelItem(no)
+            ret = [item.text(i) for i in range(item.columnCount())]
+            yield ret
 
     def __subject_changed(self):
         self.__load_students()

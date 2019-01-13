@@ -1,3 +1,4 @@
+import csv
 from os.path import dirname, basename, isdir
 from traceback import format_exc, print_exc
 from typing import List
@@ -54,6 +55,10 @@ class MainWindow:
         file_menu.addSeparator()
         self.__exit_action = file_menu.addAction("Exit")
         self.__exit_action.triggered.connect(self.__exit_clicked)
+        export_menu = menu_bar.addMenu("Export")
+        self.__export_csv_action = export_menu.addAction("Export CSV...")
+        self.__export_csv_action.triggered.connect(self.__export_csv_clicked)
+        self.__export_csv_action.setEnabled(False)
         self.__window.setMenuBar(menu_bar)
 
     def __build_tabs(self):
@@ -80,6 +85,7 @@ class MainWindow:
         self.__save_action.setEnabled(has_model and self.model.data_layer.can_save)
         self.__save_as_action.setEnabled(has_model)
         self.__close_action.setEnabled(has_model)
+        self.__export_csv_action.setEnabled(has_model)
         self.__tabWidget.setEnabled(has_model)
 
     def __set_title(self):
@@ -166,6 +172,24 @@ class MainWindow:
 
     def __exit_clicked(self, *args):
         QApplication.exit(0)
+    
+    def __export_csv_clicked(self, *args):
+        current_tab = self.__tabs[self.__tabWidget.currentIndex()]
+        if 'data' in dir(current_tab) and 'headers' in dir(current_tab):
+            file_name, filter = QFileDialog.getSaveFileName(
+                self.__window,
+                caption="Export CSV",
+                filter="CSV (*.csv)"
+            )
+    
+            if file_name:
+                if '.' not in basename(file_name):
+                    file_name = file_name + '.csv'
+                with open(file_name, 'w') as csv_file:
+                    csv_obj = csv.writer(csv_file)
+                    csv_obj.writerow(current_tab.headers)
+                    for row in current_tab.data:
+                        csv_obj.writerow(row)
 
     def __add_current_file(self, file):
         settings = QSettings()
