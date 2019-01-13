@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 
 class HomeWork:
@@ -21,11 +21,13 @@ class HomeWork:
 class HomeWorkCategory:
     name: str
     home_works: List[HomeWork]
+    max_points: Optional[float]
 
     def __init__(self, subject, name):
         self.__subject = subject
         self.name = name
         self.home_works = []
+        self.max_points = None
 
     def clear_home_works(self):
         self.home_works.clear()

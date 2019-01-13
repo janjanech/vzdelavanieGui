@@ -11,6 +11,9 @@ class HomeWorkCategoryDeserializer:
             self.__subject,
             self.__category_element.attrib['name']
         )
+        
+        if 'maxpoints' in self.__category_element.attrib:
+            home_work_category.max_points = float(self.__category_element.attrib['maxpoints'])
 
         for homework_element in self.__category_element.xpath('./homework'):
             homework = HomeWork(

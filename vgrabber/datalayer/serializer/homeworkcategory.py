@@ -14,6 +14,8 @@ class HomeWorkCategorySerializer:
             'category',
             name=self.__home_work_category.name
         )
+        if self.__home_work_category.max_points is not None:
+            category_element.attrib['maxpoints'] = str(self.__home_work_category.max_points)
 
         for home_work in self.__home_work_category.home_works:
             home_work_element = Element(
