@@ -1,3 +1,4 @@
+from itertools import groupby
 from typing import List
 
 from .homework import HomeWork
@@ -156,3 +157,13 @@ class Student:
             for grade in self.grades:
                 if grade.final_exam is hw_test_or_exam:
                     grade.points = points
+    
+    def compute_semestral_grading(self):
+        test_points = sum(test.points for test in self.test_points if test.points)
+        category_points = {}
+
+        points_by_category = groupby(self.home_work_points, lambda home_work_points: home_work_points.home_work.category)
+        for category, list_of_points in points_by_category:
+            category_points[category] = sum(home_work.points for home_work in list_of_points if home_work.points)
+            
+        return test_points + sum(category_points.values())

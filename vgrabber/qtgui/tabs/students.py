@@ -16,7 +16,7 @@ class StudentsTab:
         self.__student_list = QTreeWidget()
         self.__student_list.setSortingEnabled(True)
         self.__student_list.setColumnCount(5)
-        self.__student_list.setHeaderLabels(["Number", "Full Name", "Group", "Moodle email", "Moodle group"])
+        self.__student_list.setHeaderLabels(["Number", "Full Name", "Group", "Moodle email", "Moodle group", "Semestral points"])
         self.__student_list.itemSelectionChanged.connect(self.__student_selected)
 
         self.__student_details = QTreeWidget()
@@ -64,7 +64,8 @@ class StudentsTab:
                         f"{student.surname} {student.name}",
                         student.group,
                         student.moodle_email,
-                        moodle_group_name
+                        moodle_group_name,
+                        str(student.compute_semestral_grading())
                     ],
                     student
                 )

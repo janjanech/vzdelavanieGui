@@ -2,11 +2,14 @@ from typing import List
 
 
 class HomeWork:
+    category: "HomeWorkCategory"
+    
     def __init__(self, subject, id, name, moodle_id):
         self.__subject = subject
         self.id = id
         self.name = name
         self.moodle_id = moodle_id
+        self.category = None
 
     def get_submissions(self):
         for student in self.__subject.students:
@@ -29,3 +32,4 @@ class HomeWorkCategory:
 
     def add_home_work(self, home_work):
         self.home_works.append(home_work)
+        home_work.category = self
