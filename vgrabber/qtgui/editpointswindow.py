@@ -43,7 +43,7 @@ class EditPointsWindow:
         self.__points_widget.setHorizontalHeaderLabels(["Name", "Points"])
         layout.addWidget(self.__points_widget)
         
-        button_box = QDialogButtonBox(QDialogButtonBox.Ok)
+        button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         button_box.accepted.connect(self.__window.accept)
         button_box.rejected.connect(self.__window.reject)
         
@@ -81,6 +81,6 @@ class EditPointsWindow:
             self.__changes[cell.student] = cell.points
     
     def run(self):
-        self.__window.exec()
-        for student, points in self.__changes.items():
-            student.set_points_for(self.__owner_object, points)
+        if self.__window.exec() == QDialog.Accepted:
+            for student, points in self.__changes.items():
+                student.set_points_for(self.__owner_object, points)
