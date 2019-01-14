@@ -9,3 +9,4 @@ from .moodlegrades import MoodleGradesActionExecutor
 from .filedownloader import FileDownloaderActionExecutor
 from .testdownloader import TestDownloaderActionExecutor
 from .moodleteachergroups import MoodleTeacherGroupsActionExecutor
+from .exportsemestralpoints import ExportSemestralPointsActionExecutor

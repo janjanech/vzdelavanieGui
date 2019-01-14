@@ -7,17 +7,18 @@ from PyQt5.QtCore import Qt, QSettings
 from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFileDialog, QMessageBox
 
 from vgrabber.base.importaction import ImportAction
+from vgrabber.base.exportaction import ExportAction
 from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor, ZipFileAccessor
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
 
 try:
-    from vgrabber.syncer import Importer
+    from vgrabber.syncer import Importer, Exporter
     from vgrabber.qtgui.syncing import LoginDialog, SyncSelectorDialog, QtCallbacks
 
-    ALLOW_IMPORT = True
+    ALLOW_SYNC = True
 except ImportError:
     print_exc()
-    ALLOW_IMPORT = False
+    ALLOW_SYNC = False
 
 
 class MainWindow:
@@ -39,7 +40,7 @@ class MainWindow:
         file_menu = menu_bar.addMenu("File")
         self.__import_action = file_menu.addAction("Import...")
         self.__import_action.triggered.connect(self.__import_clicked)
-        self.__import_action.setEnabled(ALLOW_IMPORT)
+        self.__import_action.setEnabled(ALLOW_SYNC)
         file_menu.addSeparator()
         self.__open_action = file_menu.addAction("Open...")
         self.__open_action.triggered.connect(self.__open_clicked)
@@ -57,6 +58,9 @@ class MainWindow:
         self.__exit_action = file_menu.addAction("Exit")
         self.__exit_action.triggered.connect(self.__exit_clicked)
         export_menu = menu_bar.addMenu("Export")
+        self.__export_action = export_menu.addAction("Export")
+        self.__export_action.triggered.connect(self.__export_clicked)
+        self.__export_action.setEnabled(False)
         self.__export_csv_action = export_menu.addAction("Export CSV...")
         self.__export_csv_action.triggered.connect(self.__export_csv_clicked)
         self.__export_csv_action.setEnabled(False)
@@ -87,6 +91,7 @@ class MainWindow:
         self.__save_as_action.setEnabled(has_model)
         self.__close_action.setEnabled(has_model)
         self.__export_csv_action.setEnabled(has_model)
+        self.__export_action.setEnabled(ALLOW_SYNC and has_model)
         self.__tabWidget.setEnabled(has_model)
 
     def __set_title(self):
@@ -98,8 +103,14 @@ class MainWindow:
                 self.model.subject.name,
                 self.model.subject.year
             ))
-
+    
+    def __export_clicked(self, *args):
+        self.__do_sync(ExportAction, Exporter)
+    
     def __import_clicked(self, *args):
+        self.__do_sync(ImportAction, Importer)
+    
+    def __do_sync(self, actions_enum, syncer):
         login_dlg = LoginDialog()
         login, password = login_dlg.exec()
 
@@ -111,14 +122,14 @@ class MainWindow:
         else:
             finished_actions = []
 
-        import_dlg = SyncSelectorDialog(ImportAction, finished_actions)
+        import_dlg = SyncSelectorDialog(actions_enum, finished_actions)
         actions = import_dlg.exec()
         if actions is None:
             return
 
-        with Importer(login, password, actions, QtCallbacks(), self.model.subject) as importer:
-            importer.exec()
-            self.model.use_subject(importer.model)
+        with syncer(login, password, actions, QtCallbacks(), self.model.subject) as syncer_obj:
+            syncer_obj.exec()
+            self.model.use_subject(syncer_obj.model)
 
     def __open_clicked(self, *args):
         file_name, filter = QFileDialog.getOpenFileName(
