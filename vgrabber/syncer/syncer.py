@@ -1,8 +1,13 @@
+from abc import ABC, abstractmethod
+
 from .state import SyncerState
 
 
-class Syncer:
-    actions = ()
+class Syncer(ABC):
+    @property
+    @abstractmethod
+    def actions(self):
+        pass
 
     def __init__(self, login, password, actions, ui_callbacks, model=None):
         self.__requested_actions = actions
