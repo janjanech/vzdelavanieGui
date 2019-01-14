@@ -159,6 +159,13 @@ class Student:
                     grade.points = points
     
     def compute_semestral_grading(self):
+        for category in self.__subject.home_work_categories:
+            for home_work in category.home_works:
+                if home_work.required_points is not None:
+                    points = self.get_points_for(home_work)
+                    if points is None or points.points is None or points.points < home_work.required_points:
+                        return 0
+        
         test_points = sum(test.points for test in self.test_points if test.points is not None)
         category_points = {}
         
@@ -171,4 +178,7 @@ class Student:
             if category.max_points is not None and points > category.max_points:
                 category_points[category] = category.max_points
         
-        return test_points + sum(category_points.values())
+        total_points = test_points + sum(category_points.values())
+        if total_points < 25:  # TODO TODO TODO!!!
+            return 0
+        return total_points

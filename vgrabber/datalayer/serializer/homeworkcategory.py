@@ -24,6 +24,10 @@ class HomeWorkCategorySerializer:
                 name = home_work.name,
                 moodleid = str(home_work.moodle_id)
             )
+            
+            if home_work.required_points is not None:
+                home_work_element['reqpoints'] = str(home_work.required_points)
+            
             category_element.append(home_work_element)
 
         return category_element

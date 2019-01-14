@@ -22,6 +22,9 @@ class HomeWorkCategoryDeserializer:
                 homework_element.attrib['name'],
                 int(homework_element.attrib['moodleid'])
             )
+            
+            if 'reqpoints' in homework_element.attrib:
+                homework.required_points = float(homework_element.attrib['reqpoints'])
 
             home_work_category.add_home_work(homework)
 

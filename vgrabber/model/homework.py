@@ -3,6 +3,7 @@ from typing import List, Optional
 
 class HomeWork:
     category: "HomeWorkCategory"
+    required_points: Optional[float]
     
     def __init__(self, subject, id, name, moodle_id):
         self.__subject = subject
@@ -10,6 +11,7 @@ class HomeWork:
         self.name = name
         self.moodle_id = moodle_id
         self.category = None
+        self.required_points = None
 
     def get_submissions(self):
         for student in self.__subject.students:
