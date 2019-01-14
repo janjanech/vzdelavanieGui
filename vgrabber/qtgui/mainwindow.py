@@ -32,38 +32,37 @@ class MainWindow:
         self.__build_menu()
         self.__build_tabs()
         self.__refresh_recents()
+        self.__subject_changed()
 
         self.model.subject_changed.connect(self.__subject_changed)
 
     def __build_menu(self):
         menu_bar = QMenuBar()
+        
         file_menu = menu_bar.addMenu("File")
-        self.__import_action = file_menu.addAction("Import...")
-        self.__import_action.triggered.connect(self.__import_clicked)
-        self.__import_action.setEnabled(ALLOW_SYNC)
-        file_menu.addSeparator()
         self.__open_action = file_menu.addAction("Open...")
         self.__open_action.triggered.connect(self.__open_clicked)
         self.__recent_menu = file_menu.addMenu("Recent files")
         self.__save_action = file_menu.addAction("Save")
         self.__save_action.triggered.connect(self.__save_clicked)
-        self.__save_action.setEnabled(False)
         self.__save_as_action = file_menu.addAction("Save as...")
         self.__save_as_action.triggered.connect(self.__save_as_clicked)
-        self.__save_as_action.setEnabled(False)
         self.__close_action = file_menu.addAction("Close")
         self.__close_action.triggered.connect(self.__close_clicked)
-        self.__close_action.setEnabled(False)
         file_menu.addSeparator()
         self.__exit_action = file_menu.addAction("Exit")
         self.__exit_action.triggered.connect(self.__exit_clicked)
-        export_menu = menu_bar.addMenu("Export")
-        self.__export_action = export_menu.addAction("Export")
+        
+        sync_menu = menu_bar.addMenu("Sync")
+        self.__import_action = sync_menu.addAction("Import...")
+        self.__import_action.triggered.connect(self.__import_clicked)
+        self.__export_action = sync_menu.addAction("Export...")
         self.__export_action.triggered.connect(self.__export_clicked)
-        self.__export_action.setEnabled(False)
-        self.__export_csv_action = export_menu.addAction("Export CSV...")
+        
+        tab_menu = menu_bar.addMenu("Tab")
+        self.__export_csv_action = tab_menu.addAction("Export CSV...")
         self.__export_csv_action.triggered.connect(self.__export_csv_clicked)
-        self.__export_csv_action.setEnabled(False)
+        
         self.__window.setMenuBar(menu_bar)
 
     def __build_tabs(self):
@@ -81,18 +80,30 @@ class MainWindow:
         add_tab(TestsTab, "Tests")
         add_tab(FinalExamsTab, "Final exams")
 
+        self.__tabWidget.currentChanged.connect(lambda *args: self.__refresh_menu_enabled())
+        
         self.__window.setCentralWidget(self.__tabWidget)
 
     def __subject_changed(self):
         self.__set_title()
+        
+        self.__refresh_menu_enabled()
 
         has_model = self.model.subject is not None
+
+        self.__tabWidget.setEnabled(has_model)
+    
+    def __refresh_menu_enabled(self):
+        has_model = self.model.subject is not None
+    
         self.__save_action.setEnabled(has_model and self.model.data_layer.can_save)
         self.__save_as_action.setEnabled(has_model)
         self.__close_action.setEnabled(has_model)
-        self.__export_csv_action.setEnabled(has_model)
+    
+        self.__import_action.setEnabled(ALLOW_SYNC)
         self.__export_action.setEnabled(ALLOW_SYNC and has_model)
-        self.__tabWidget.setEnabled(has_model)
+    
+        self.__export_csv_action.setEnabled(has_model and self.__can_export_csv())
 
     def __set_title(self):
         if self.model.subject is None:
@@ -185,9 +196,12 @@ class MainWindow:
     def __exit_clicked(self, *args):
         QApplication.exit(0)
     
+    def __can_export_csv(self):
+        current_tab = self.__get_current_tab()
+        return 'data' in dir(current_tab) and 'headers' in dir(current_tab)
+    
     def __export_csv_clicked(self, *args):
-        current_tab = self.__tabs[self.__tabWidget.currentIndex()]
-        if 'data' in dir(current_tab) and 'headers' in dir(current_tab):
+        if self.__can_export_csv:
             file_name, filter = QFileDialog.getSaveFileName(
                 self.__window,
                 caption="Export CSV",
@@ -197,6 +211,7 @@ class MainWindow:
             if file_name:
                 if '.' not in basename(file_name):
                     file_name = file_name + '.csv'
+                current_tab = self.__get_current_tab()
                 with open(file_name, 'w') as csv_file:
                     csv_obj = csv.writer(csv_file)
                     csv_obj.writerow(current_tab.headers)
@@ -232,4 +247,7 @@ class MainWindow:
             self.model.load(accessor)
             self.__add_current_file(file)
         action.triggered.connect(open)
+    
+    def __get_current_tab(self):
+        return self.__tabs[self.__tabWidget.currentIndex()]
 
