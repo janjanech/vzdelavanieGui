@@ -1,10 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QDialogButtonBox, QCheckBox
 
-from vgrabber.base.importaction import ImportAction
 
-
-class ImportSelectorDialog:
-    def __init__(self, finished_actions):
+class SyncSelectorDialog:
+    def __init__(self, actions_enum, finished_actions):
         self.__finished_actions = set(finished_actions)
         self.__possibilities = {}
 
@@ -13,7 +11,7 @@ class ImportSelectorDialog:
 
         layout = QVBoxLayout()
 
-        for action in ImportAction:
+        for action in actions_enum:
             check = QCheckBox()
             if action in self.__finished_actions:
                 check.setText("{0} (finished)".format(action.name))
@@ -24,7 +22,7 @@ class ImportSelectorDialog:
             check.toggled.connect(lambda *args: self.__refresh())
             layout.addWidget(check)
 
-        for default_action in ImportAction.default:
+        for default_action in actions_enum.default:
             self.__possibilities[default_action].setChecked(True)
 
         self.__button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)

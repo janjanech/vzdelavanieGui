@@ -2,7 +2,7 @@ from selenium.webdriver import ChromeOptions
 from seleniumrequests import Chrome
 
 
-class ImporterState:
+class SyncerState:
     def __init__(self, login, password, requested_actions, ui_callbacks, model):
         self.login = login
         self.password = password

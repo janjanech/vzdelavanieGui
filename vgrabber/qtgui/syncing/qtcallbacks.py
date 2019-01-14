@@ -1,4 +1,4 @@
-from vgrabber.importer import UiCallbacks
+from vgrabber.syncer import UiCallbacks
 from .subjectselector import SubjectSelectorDialog
 
 

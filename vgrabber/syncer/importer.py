@@ -3,11 +3,11 @@ from .actionexecutors import LoginActionExecutor, SelectSubjectActionExecutor, F
     MoodleGradingItemActionExecutor, MoodleGradesActionExecutor, FileDownloaderActionExecutor, \
     TestDownloaderActionExecutor, MoodleTeacherGroupsActionExecutor
 from vgrabber.base.importaction import ImportAction
-from .state import ImporterState
+from .syncer import Syncer
 
 
-class Importer:
-    __actions = (
+class Importer(Syncer):
+    actions = (
         (ImportAction.all, LoginActionExecutor),
         (ImportAction.all, SelectSubjectActionExecutor),
         ({ImportAction.final_exam_list}, FinalExamActionExecutor),
@@ -36,23 +36,3 @@ class Importer:
         ({ImportAction.moodle_test_details}, TestDownloaderActionExecutor),
         ({ImportAction.moodle_teacher_groups}, MoodleTeacherGroupsActionExecutor),
     )
-
-    def __init__(self, login, password, actions, ui_callbacks, model=None):
-        self.__requested_actions = actions
-        self.__state = ImporterState(login, password, actions, ui_callbacks, model)
-        self.model = None
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.__state.finish()
-
-    def exec(self):
-        for for_actions, executor in self.__actions:
-            if for_actions & self.__requested_actions:
-                e = executor(self.__state)
-                if e.condition():
-                    e.exec()
-
-        self.model = self.__state.model

@@ -6,12 +6,13 @@ from typing import List
 from PyQt5.QtCore import Qt, QSettings
 from PyQt5.QtWidgets import QMainWindow, QMenuBar, QTabWidget, QApplication, QFileDialog, QMessageBox
 
+from vgrabber.base.importaction import ImportAction
 from vgrabber.datalayer.fileaccessors import DirectoryFileAccessor, ZipFileAccessor
 from .tabs import StudentsTab, TeachersTab, HomeWorksTab, TestsTab, FinalExamsTab
 
 try:
-    from vgrabber.importer import Importer
-    from vgrabber.qtgui.importing import LoginDialog, ImportSelectorDialog, QtCallbacks
+    from vgrabber.syncer import Importer
+    from vgrabber.qtgui.syncing import LoginDialog, SyncSelectorDialog, QtCallbacks
 
     ALLOW_IMPORT = True
 except ImportError:
@@ -110,7 +111,7 @@ class MainWindow:
         else:
             finished_actions = []
 
-        import_dlg = ImportSelectorDialog(finished_actions)
+        import_dlg = SyncSelectorDialog(ImportAction, finished_actions)
         actions = import_dlg.exec()
         if actions is None:
             return
