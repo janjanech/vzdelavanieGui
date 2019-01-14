@@ -159,14 +159,16 @@ class Student:
                     grade.points = points
     
     def compute_semestral_grading(self):
-        test_points = sum(test.points for test in self.test_points if test.points)
+        test_points = sum(test.points for test in self.test_points if test.points is not None)
         category_points = {}
         
-        points_by_category = groupby(self.home_work_points, lambda home_work_points: home_work_points.home_work.category)
-        for category, list_of_points in points_by_category:
-            points_sum = sum(home_work.points for home_work in list_of_points if home_work.points)
-            if category.max_points is not None and points_sum > category.max_points:
-                points_sum = category.max_points
-            category_points[category] = points_sum
+        for home_work_points in self.home_work_points:
+            category = home_work_points.home_work.category
+            if home_work_points.points is not None:
+                category_points[category] = category_points.get(category, 0) + home_work_points.points
+        
+        for category, points in list(category_points.items()):
+            if category.max_points is not None and points > category.max_points:
+                category_points[category] = category.max_points
         
         return test_points + sum(category_points.values())
