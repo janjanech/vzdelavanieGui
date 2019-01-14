@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QTextEdit, QMenu
+from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QMenu
 
 from vgrabber.model import HomeWork
 from .widgets.filedetails import FileDetailsWidget
@@ -7,7 +7,7 @@ from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none
 from ..guimodel import GuiModel
 from .items import HomeWorkItem, StudentItem
-from ..editpointswindow import EditPointsWindow
+from ..dialogs.editpointswindow import EditPointsWindow
 
 
 class HomeWorksTab:
