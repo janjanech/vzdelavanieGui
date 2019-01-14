@@ -157,6 +157,8 @@ class Student:
             for grade in self.grades:
                 if grade.final_exam is hw_test_or_exam:
                     grade.points = points
+            else:
+                self.add_final_exam_points(hw_test_or_exam, points)
     
     def compute_semestral_grading(self):
         for category in self.__subject.home_work_categories:
