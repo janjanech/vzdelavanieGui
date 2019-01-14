@@ -20,7 +20,8 @@ class PointsTableItem(QTableWidgetItem):
                 return None
         return None
 
-class EditPointsWindow:
+
+class EditPointsDialog:
     def __init__(self, model, owner_object):
         self.model = model
         self.__owner_object = owner_object
