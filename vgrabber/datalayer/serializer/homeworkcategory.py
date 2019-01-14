@@ -26,7 +26,7 @@ class HomeWorkCategorySerializer:
             )
             
             if home_work.required_points is not None:
-                home_work_element['reqpoints'] = str(home_work.required_points)
+                home_work_element.attrib['reqpoints'] = str(home_work.required_points)
             
             category_element.append(home_work_element)
 

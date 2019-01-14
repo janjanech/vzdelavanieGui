@@ -2,7 +2,7 @@ from shutil import copyfileobj
 from typing import Optional
 
 from vgrabber.model import Subject, Student, StudentGrade, HomeWorkPoints, TestPoints
-from vgrabber.model.files import FileList, InMemoryFile, StoredFile
+from vgrabber.model.files import FileList, InMemoryFile, StoredFile, ExternalFile
 from vgrabber.utilities.filename import correct_file_name
 from .fileaccessors import FileAccessor
 
@@ -68,8 +68,12 @@ class FileSaver:
         for file in file_list:
             if isinstance(file, InMemoryFile):
                 new_files.append(self.__save_in_memory_file(file_accessor, file))
-            else:
+            elif isinstance(file, StoredFile):
                 new_files.append(self.__save_stored_file(file_accessor, file))
+            elif isinstance(file, ExternalFile):
+                new_files.append(self.__save_external_file(file_accessor, file))
+            else:
+                raise Exception("????")
 
         file_list.replace(new_files)
 
@@ -85,14 +89,24 @@ class FileSaver:
 
     def __save_stored_file(self, file_accessor: FileAccessor, file: StoredFile):
         if self.__old_file_accessor_root is None:
-            return self
+            return file
+        
+        new_file_path = self.__copy_file(file_accessor, file.file_name, file.file_path)
+        
+        return StoredFile(file.file_name, new_file_path)
+    
+    def __save_external_file(self, file_accessor: FileAccessor, file: ExternalFile):
+        new_file_path = self.__copy_file(file_accessor, file.file_name, file.file_path)
+        
+        return StoredFile(file.file_name, new_file_path)
 
+    def __copy_file(self, file_accessor, file_name, file_path):
         file_accessor.ensure_exists()
 
-        file_name = correct_file_name(file.file_name)
+        file_name = correct_file_name(file_name)
 
-        with self.__old_file_accessor_root.open_file(file.file_path, 'r') as old_file:
+        with self.__old_file_accessor_root.open_file(file_path, 'r') as old_file:
             with file_accessor.open_file(file_name, 'w') as new_file:
                 copyfileobj(old_file, new_file)
-
-        return StoredFile(file.file_name, file_accessor.get_relative_path(file_name))
+        
+        return file_accessor.get_relative_path(file_name)

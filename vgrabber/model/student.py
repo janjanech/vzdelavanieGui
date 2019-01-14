@@ -159,7 +159,15 @@ class Student:
                     grade.points = points
             else:
                 self.add_final_exam_points(hw_test_or_exam, points)
-    
+
+    def add_file_for(self, hw_test_or_exam, file):
+        if isinstance(hw_test_or_exam, HomeWork):
+            self.add_home_work_file(hw_test_or_exam, file)
+        if isinstance(hw_test_or_exam, Test):
+            self.add_test_file(hw_test_or_exam, file)
+        if isinstance(hw_test_or_exam, FinalExam):
+            self.add_final_exam_file(hw_test_or_exam, file)
+
     def compute_semestral_grading(self):
         for category in self.__subject.home_work_categories:
             for home_work in category.home_works:

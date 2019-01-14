@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTreeWidget, QSplitter, QTreeWidgetItem, QMenu
 
 from vgrabber.model import HomeWork
+from vgrabber.qtgui.dialogs.editfiles import EditFilesDialog
 from .widgets.filedetails import FileDetailsWidget
 from .helpers.childfileitems import add_file_items, file_double_clicked
 from .helpers.stringify import points_or_none
@@ -99,7 +100,10 @@ class HomeWorksTab:
         
         if isinstance(item, HomeWorkItem):
             menu = QMenu()
-            menu.addAction("Edit points").triggered.connect(
+            menu.addAction("Edit points...").triggered.connect(
                 lambda *args: EditPointsDialog(self.model, item.home_work).run()
+            )
+            menu.addAction("Edit files...").triggered.connect(
+                lambda *args: EditFilesDialog(self.model, item.home_work).run()
             )
             menu.exec(self.__home_work_list.viewport().mapToGlobal(pos))
