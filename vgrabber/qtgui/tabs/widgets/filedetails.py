@@ -3,7 +3,7 @@ from io import BytesIO
 
 from PyQt5.QtWidgets import QTextEdit
 
-from vgrabber.model.files import InMemoryFile, StoredFile
+from vgrabber.model.files import InMemoryFile, StoredFile, ExternalFile
 from vgrabber.qtgui.guimodel import GuiModel
 from vgrabber.qtgui.tabs.items import FileItem
 
@@ -72,7 +72,7 @@ class FileDetailsWidget:
     def __get_data(self, file):
         if isinstance(file, InMemoryFile):
             return file.data
-        elif isinstance(file, StoredFile):
+        elif isinstance(file, (StoredFile, ExternalFile)):
             with self.model.data_layer.file_accessor.open_file(file.file_path, 'r') as f:
                 return f.read()
         else:
