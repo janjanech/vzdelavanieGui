@@ -145,18 +145,21 @@ class Student:
             for home_work_points in self.home_work_points:
                 if home_work_points.home_work is hw_test_or_exam:
                     home_work_points.points = points
+                    break
             else:
                 self.add_home_work_points(hw_test_or_exam, points)
         if isinstance(hw_test_or_exam, Test):
             for test_points in self.test_points:
                 if test_points.test is hw_test_or_exam:
                     test_points.points = points
+                    break
             else:
                 self.add_test_points(hw_test_or_exam, points)
         if isinstance(hw_test_or_exam, FinalExam):
             for grade in self.grades:
                 if grade.final_exam is hw_test_or_exam:
                     grade.points = points
+                    break
             else:
                 self.add_final_exam_points(hw_test_or_exam, points)
 
