@@ -1,5 +1,8 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QSplitter
+from urllib.parse import urlencode
+
+from PyQt5.QtCore import Qt, QUrl
+from PyQt5.QtGui import QDesktopServices
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QSplitter, QMenu
 
 from vgrabber.model import Student
 from vgrabber.qtgui.tabs.widgets.filedetails import FileDetailsWidget
@@ -18,6 +21,9 @@ class StudentsTab:
         self.__student_list.setColumnCount(5)
         self.__student_list.setHeaderLabels(["Number", "Full Name", "Group", "Moodle email", "Moodle group", "Semestral points"])
         self.__student_list.itemSelectionChanged.connect(self.__student_selected)
+        self.__student_list.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.__student_list.customContextMenuRequested.connect(self.__student_list_context_menu)
+        self.__student_list.setSelectionMode(QTreeWidget.ExtendedSelection)
 
         self.__student_details = QTreeWidget()
         self.__student_details.setColumnCount(4)
@@ -125,3 +131,19 @@ class StudentsTab:
         self.__student_file_details.master_selection_changed(
             self.__student_details.selectedItems()
         )
+
+    def __student_list_context_menu(self, pos):
+        menu = QMenu()
+        menu.addAction("Send mail").triggered.connect(
+            lambda *args: self.__send_mail_to_selected()
+        )
+        menu.exec(self.__student_list.viewport().mapToGlobal(pos))
+    
+    def __send_mail_to_selected(self):
+        mails = []
+        for student_item in self.__student_list.selectedItems():
+            if isinstance(student_item, StudentItem):
+                mails.append("{0} {1} <{2}>".format(student_item.student.name, student_item.student.surname, student_item.student.moodle_email))
+        
+        mailtourl = {'to': ','.join(mails)}
+        QDesktopServices.openUrl(QUrl("mailto:?" + urlencode(mailtourl).replace('+', '%20'), QUrl.TolerantMode))
